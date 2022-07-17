@@ -85,7 +85,7 @@ const banad = {
         touchend: function touchend(target) {
             // Close any ads that aren't currently touched.
             banad.get.adElements().forEach(function closeNotice(ad) {
-                const touched = target.path.includes(ad);
+                const touched = target.composedPath().includes(ad);
                 if (!touched) {
                     banad.ads.closeNotice(ad);
                 }
