@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BanAd", "BanAd\BanAd.csproj", "{B297894A-EA7F-4ACC-BDC1-39196C4662D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BanAd.Demo", "BanAd.Demo\BanAd.Demo\BanAd.Demo.csproj", "{89B4E689-C186-4B53-9C14-8313E7193184}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B297894A-EA7F-4ACC-BDC1-39196C4662D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B297894A-EA7F-4ACC-BDC1-39196C4662D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B297894A-EA7F-4ACC-BDC1-39196C4662D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B297894A-EA7F-4ACC-BDC1-39196C4662D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89B4E689-C186-4B53-9C14-8313E7193184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89B4E689-C186-4B53-9C14-8313E7193184}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89B4E689-C186-4B53-9C14-8313E7193184}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89B4E689-C186-4B53-9C14-8313E7193184}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
