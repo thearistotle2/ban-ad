@@ -15,4 +15,6 @@ RUN apt-get update && apt-get install -y curl
 
 ENV ASPNETCORE_URLS=http://+:2022
 
+HEALTHCHECK CMD curl --fail http://localhost:2022/banad/newid || exit 1
+
 ENTRYPOINT [ "dotnet", "BanAd.dll" ]
