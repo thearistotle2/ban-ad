@@ -10,4 +10,8 @@
       <Folder Include="Models" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\TempImages\629B5C2E.png" />
+    </ItemGroup>
+
 </Project>

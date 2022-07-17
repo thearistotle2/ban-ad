@@ -13,7 +13,7 @@ public class BanAdController : Controller
 
     public IActionResult Ad(string id)
     {
-        return PhysicalFile("/home/kevin/RiderProjects/ban-ad/BanAd/TempImages/629B5C2E.png", "image/png");
+        return new VirtualFileResult("~/TempImages/629B5C2E.png", "image/png");
     }
 
     public IActionResult Out(string id)
