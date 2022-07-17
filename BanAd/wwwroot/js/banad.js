@@ -1,7 +1,7 @@
 const banad = {
     get: {
         baseUrl: function baseUrl () {
-            const url =document.getElementsByTagName('body')[0].getAttribute('data-banad-url');
+            const url = document.getElementsByTagName('body')[0].getAttribute('data-banad-url');
             return url.replace(/\/$/, '');
         },
         adElements: function adElements() {
@@ -15,7 +15,10 @@ const banad = {
                 ad.innerHTML = '';
                 
                 ad.onmouseover = banad.ads.mouseover;
+                ad.addEventListener('touchstart', banad.ads.mouseover);
+                
                 ad.onmouseout  = banad.ads.mouseout;
+                window.addEventListener('touchstart', banad.ads.touchend);
 
                 banad.load.css(ad, {
                     position: 'relative',
@@ -53,23 +56,39 @@ const banad = {
         }
     },
     ads: {
-        mouseover: function mouseover() {
-            const base = banad.get.baseUrl();
-            const id = this.getAttribute('data-banad-id');
-            
-            const notice = this.querySelector('[data-banad-notice-for="' + id + '"]');
+        openNotice: function openNotice(ad) {
+            const id = ad.getAttribute('data-banad-id');
+
+            const notice = ad.querySelector('[data-banad-notice-for="' + id + '"]');
             banad.load.css(notice, {
                 bottom: '-1.5em',
                 'border-bottom': '1px solid black',
             });
         },
-        mouseout: function mouseout() {
-            const id = this.getAttribute('data-banad-id');
-            
-            const notice = this.querySelector('[data-banad-notice-for="' + id + '"]');
+        closeNotice: function closeNotice(ad) {
+            const id = ad.getAttribute('data-banad-id');
+
+            const notice = ad.querySelector('[data-banad-notice-for="' + id + '"]');
             banad.load.css(notice, {
                 bottom: '-0.25em',
                 'border-bottom': null,
+            });
+        },
+        
+        mouseover: function mouseover() {
+            banad.ads.openNotice(this);
+        },
+        mouseout: function mouseout() {
+            banad.ads.closeNotice(this);
+        },
+        
+        touchend: function touchend(target) {
+            // Close any ads that aren't currently touched.
+            banad.get.adElements().forEach(function closeNotice(ad) {
+                const touched = target.path.includes(ad);
+                if (!touched) {
+                    banad.ads.closeNotice(ad);
+                }
             });
         }
     }

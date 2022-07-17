@@ -22,10 +22,15 @@ div.container {
   justify-content: center;
 }
 
-div.ad-1 {
+div.ad-1,
+div.ad-2 {
   box-sizing: content-box;
   width: 300px;
   height: 180px;
   border: 1px solid black;
   display: block !important;
+}
+
+div.ad-2 {
+  margin-top: 20px;
 }
