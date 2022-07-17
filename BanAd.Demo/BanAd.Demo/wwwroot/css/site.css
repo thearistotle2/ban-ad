@@ -16,3 +16,16 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+div.container {
+  display: flex;
+  justify-content: center;
+}
+
+div.ad-1 {
+  box-sizing: content-box;
+  width: 300px;
+  height: 180px;
+  border: 1px solid black;
+  display: block !important;
+}
