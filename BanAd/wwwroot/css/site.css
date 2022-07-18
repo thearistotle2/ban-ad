@@ -16,3 +16,161 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* Contact Form Body */
+
+body.contact-form-body {
+  font-family: 'Lato', georgia;
+  font-size: 25px;
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(236, 181, 62, 0.95);
+  text-align: center;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+.contact-form-body #contact-form {
+  max-width: 90%;
+  margin: 50px auto;
+  padding-top: 50px;
+  border-top: 2px dashed rgba(255, 255, 255, 0.5);
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.5);
+}
+
+.contact-form-body label {
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.contact-form-body input {
+  border: none;
+  outline: none;
+  border-radius: 0;
+  text-align: center;
+  background: none;
+  font-weight: 700;
+  font-family: 'Lato', georgia;
+  font-size: 25px;
+  color: rgba(255, 255, 255, 1);
+  max-width: 90%;
+  padding: 1rem;
+  border: 2px dashed rgba(255, 255, 255, 0);
+  box-sizing: border-box;
+  cursor: text;
+}
+
+.contact-form-body input {
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.5);
+}
+
+.contact-form-body input:required {
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.5);
+}
+
+.contact-form-body input:focus {
+  border-bottom: 2px dashed rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.contact-form-body input:required:valid {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.contact-form-body input:required:invalid {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.contact-form-body ::-webkit-input-placeholder {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.contact-form-body :-moz-placeholder {
+  /* Firefox 18- */
+
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.contact-form-body ::-moz-placeholder {
+  /* Firefox 19+ */
+
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.contact-form-body :-ms-input-placeholder {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.contact-form-body .expanding {
+  vertical-align: top;
+}
+
+.contact-form-body .send-icn {
+  fill: rgba(255, 255, 255, 1)
+}
+
+.contact-form-body .send-icn:hover {
+  fill: rgba(0, 0, 0, 1);
+  cursor: pointer;
+}
+
+.contact-form-body button {
+  background: none;
+  border: none;
+  outline: none;
+  margin: 2vmax;
+}
+
+.contact-form-body button:hover small {
+  opacity: 1;
+}
+
+.contact-form-body small {
+  display: block;
+  opacity: 0;
+}
+
+.contact-form-body .website, 
+footer {
+  opacity: 1;
+  font-size: 16px;
+  color: white;
+  position: relative;
+  text-align: center;
+  display: block;
+  margin-top: 60px;
+}
+
+.contact-form-body .website a,
+footer .form-notice-reveal a {
+  color: white;
+}
+
+.contact-form-body footer small {
+  opacity: 1;
+  max-width: 60%;
+  margin: 0 auto;
+}
+
+.contact-form-body footer .form-notice {
+  display: none;
+}
+
+.contact-form-body strong {
+  font-weight: bold;
+}
+
+.contact-form-body .intro {
+  margin-top: 60px;
+}

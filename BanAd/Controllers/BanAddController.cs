@@ -1,9 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BanAd.Config;
+using BanAd.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BanAd.Controllers;
 
 public class BanAdController : Controller
 {
+    
+    private AdSlotsMonitor AdSlots { get; }
+    private RunOptions Config { get; }
+
+    public BanAdController(AdSlotsMonitor adSlots, RunOptions config)
+    {
+        AdSlots = adSlots;
+        Config = config;
+    }
 
     public IActionResult NewId()
     {
@@ -23,7 +34,20 @@ public class BanAdController : Controller
 
     public IActionResult Advertise(string id)
     {
-        return Content("");
+        if (!AdSlots.Value.Ads.ContainsKey(id))
+        {
+            return Content(string.Empty);
+        }
+
+        var mb = Math.DivRem(Config.MaxUploadSizeKiB, 1024);
+        var adSlot = AdSlots.Value.Ads[id];
+        return View(new AdvertiseViewModel
+        {
+            AdSlotId = id,
+            AdSlotInfo = adSlot,
+            SupportedExtensions = Config.SupportedExtensions,
+            MaxSize = mb.Remainder == 0 ? $"{mb.Quotient}mb" : $"{Config.MaxUploadSizeKiB}kb"
+        });
     }
     
 }

@@ -1,7 +1,10 @@
+using BanAd.Config;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+Dependencies.AddDependencies(builder.Services);
 
 var app = builder.Build();
 

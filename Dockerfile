@@ -14,6 +14,11 @@ COPY --from=build-env /app/out .
 RUN apt-get update && apt-get install -y curl
 
 ENV ASPNETCORE_URLS=http://+:2022
+ENV SITE_ID=BanAd
+ENV AD_SLOT_DECLARATIONS=/run/ad-slots
+ENV ADS_LOCATION=/run/ads
+ENV EXTENSIONS=.png;.jpg;.jpeg;.gif
+ENV MAX_SIZE_KB=8192
 
 HEALTHCHECK CMD curl --fail http://localhost:2022/banad/newid || exit 1
 
