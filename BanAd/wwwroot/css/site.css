@@ -174,3 +174,11 @@ footer .form-notice-reveal a {
 .contact-form-body .intro {
   margin-top: 60px;
 }
+
+.contact-form-body input[type="file"]::file-selector-button {
+  display: none;
+}
+
+.contact-form-body input[type="file"] {
+  text-align-last: center;
+}
