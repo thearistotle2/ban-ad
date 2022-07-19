@@ -11,10 +11,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css"/>
 </head>
 <body class="contact-form-body">
-@* <small style="opacity: 1"> *@
-@*     <p>ahead of me</p> *@
-@*     <p>image file (validate size and dimensions), captcha (modal)</p> *@
-@* </small> *@
 
 <div class="intro">
     <p>Looking to advertise?</p>
@@ -25,6 +21,7 @@
 <form id="contact-form">
     <p>
         I want this <strong>@Model.AdSlotInfo.Width x @Model.AdSlotInfo.Height</strong> ad slot for
+        <input type="text" name="@Model.HoneypotName" id="@Model.HoneypotName"/>
     </p>
     <p>
         <input type="number" name="days" id="days" min="0" step="1" placeholder="(days)">
@@ -38,7 +35,7 @@
         <input type="email" name="your-email" id="email" placeholder="(your email address)" required>.
     </p>
     <p>
-        I've made sure my <label for="ad">ad</label> is no more than <strong>@Model.MaxSize</strong> and attached it:
+        I've made sure my <label for="ad">ad</label> is no more than <strong>@Model.MaxSizeDisplay</strong> and attached it:
     </p>
     <p>
         <input type="file" name="ad" id="ad" accept="@string.Join(",", Model.SupportedExtensions)" required>
@@ -52,6 +49,7 @@
             <small>send</small>
         </button>
     </p>
+    @Html.AntiForgeryToken()
 </form>
 
 <footer>

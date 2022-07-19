@@ -182,3 +182,16 @@ footer .form-notice-reveal a {
 .contact-form-body input[type="file"] {
   text-align-last: center;
 }
+
+.contact-form-body input[type="number"]::-webkit-outer-spin-button,
+.contact-form-body input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+.contact-form-body input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.contact-form-body #contact-form p:first-of-type input:first-of-type {
+  display: none;
+}

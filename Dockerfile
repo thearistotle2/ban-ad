@@ -18,7 +18,9 @@ ENV SITE_ID=BanAd
 ENV AD_SLOT_DECLARATIONS=/run/ad-slots
 ENV ADS_LOCATION=/run/ads
 ENV EXTENSIONS=.png;.jpg;.jpeg;.gif
-ENV MAX_SIZE_KB=8192
+ENV MAX_SIZE_KB=150
+ENV BOT_HONEYPOT_NAME=name
+ENV BOT_MIN_SECONDS=5
 
 HEALTHCHECK CMD curl --fail http://localhost:2022/banad/newid || exit 1
 

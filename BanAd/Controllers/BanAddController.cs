@@ -1,4 +1,5 @@
-﻿using BanAd.Config;
+﻿using System.Collections.Concurrent;
+using BanAd.Config;
 using BanAd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ public class BanAdController : Controller
     
     private AdSlotsMonitor AdSlots { get; }
     private RunOptions Config { get; }
+    private static ConcurrentDictionary<string, DateTime> TimeTracker { get; } = new ();
 
     public BanAdController(AdSlotsMonitor adSlots, RunOptions config)
     {
@@ -38,7 +40,9 @@ public class BanAdController : Controller
         {
             return Content(string.Empty);
         }
+        TimeTracker[Request.HttpContext.Connection.Id] = DateTime.UtcNow;
 
+        Console.WriteLine(Request.HttpContext.Connection.Id);
         var mb = Math.DivRem(Config.MaxUploadSizeKiB, 1024);
         var adSlot = AdSlots.Value.Ads[id];
         return View(new AdvertiseViewModel
@@ -46,7 +50,9 @@ public class BanAdController : Controller
             AdSlotId = id,
             AdSlotInfo = adSlot,
             SupportedExtensions = Config.SupportedExtensions,
-            MaxSize = mb.Remainder == 0 ? $"{mb.Quotient}mb" : $"{Config.MaxUploadSizeKiB}kb"
+            MaxSizeKiB = Config.MaxUploadSizeKiB,
+            MaxSizeDisplay = mb.Remainder == 0 ? $"{mb.Quotient}mb" : $"{Config.MaxUploadSizeKiB}kb",
+            HoneypotName = Config.BotHoneypotName
         });
     }
     

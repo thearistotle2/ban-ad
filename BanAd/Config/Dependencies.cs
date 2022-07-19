@@ -12,16 +12,22 @@ public static class Dependencies
                 ';',
                 StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries
             ).Select(ext => $".{ext.TrimStart('.')}"); // Make sure the extension start with a .
+            
             var maxSize = int.Parse(env["MAX_SIZE_KB"]);
             if (maxSize < 1) { maxSize = 1; }
             
+            var minSeconds = int.Parse(env["BOT_MIN_SECONDS"]);
+            if (minSeconds < 1) { minSeconds = 1; }
+
             return new RunOptions
             {
                 SiteId = env["SITE_ID"],
                 AdSlotDeclarations = env["AD_SLOT_DECLARATIONS"],
                 AdsLocation = env["ADS_LOCATION"],
                 SupportedExtensions = extensions,
-                MaxUploadSizeKiB = maxSize
+                MaxUploadSizeKiB = maxSize,
+                BotHoneypotName = env["BOT_HONEYPOT_NAME"],
+                BotMinSeconds = minSeconds
             };
         });
 

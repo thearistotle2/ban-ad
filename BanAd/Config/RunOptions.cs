@@ -9,4 +9,7 @@ public class RunOptions
     
     public IEnumerable<string> SupportedExtensions { get; set; }
     public int MaxUploadSizeKiB { get; set; }
+    
+    public string BotHoneypotName { get; set; }
+    public int BotMinSeconds { get; set; }
 }
