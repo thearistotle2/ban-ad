@@ -4,6 +4,7 @@ namespace BanAd.ViewModels;
 
 public class AdvertiseViewModel
 {
+    public string SiteId { get; set; }
     public string AdSlotId { get; set; }
     public AdSlot AdSlotInfo { get; set; }
     public IEnumerable<string> SupportedExtensions { get; set; }

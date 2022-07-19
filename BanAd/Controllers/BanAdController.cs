@@ -26,11 +26,17 @@ public class BanAdController : Controller
         Config = config;
     }
 
+    #region " AdSlot Management "
+
     public IActionResult NewId()
     {
         var id = $"{Guid.NewGuid().GetHashCode():X}";
         return Content(id);
     }
+
+    #endregion
+
+    #region " Ad Serving "
 
     public IActionResult Ad(string id)
     {
@@ -43,6 +49,19 @@ public class BanAdController : Controller
         var ad = AdBuilder.BuildAd(id);
         return Redirect(ad.Link());
     }
+    
+    #region " Preview Ads "
+    
+    public IActionResult Upcoming(string id)
+    {
+        throw new NotImplementedException();
+    }
+    
+    #endregion
+
+    #endregion
+
+    #region " New Ads "
 
     public IActionResult Advertise(string id)
     {
@@ -57,6 +76,7 @@ public class BanAdController : Controller
         var adSlot = AdSlots.Value.Ads[id];
         return View(new AdvertiseViewModel
         {
+            SiteId = Config.SiteId,
             AdSlotId = id,
             AdSlotInfo = adSlot,
             SupportedExtensions = Config.SupportedExtensions,
@@ -80,7 +100,6 @@ public class BanAdController : Controller
             else
             {
                 // We have data and we don't think it's from a bot.  Let's go!
-                
             }
 
             return Json(new AdvertiseResult { Success = true });
@@ -114,4 +133,6 @@ public class BanAdController : Controller
         Console.WriteLine($"Connection Id {Request.HttpContext.Connection.Id} determined to be a bot.");
         return bot;
     }
+
+    #endregion
 }

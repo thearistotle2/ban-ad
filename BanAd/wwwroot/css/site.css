@@ -199,3 +199,12 @@ footer .form-notice-reveal a {
 .contact-form-body #contact-form p:first-of-type input:first-of-type {
   display: none;
 }
+
+.contact-form-body .hidden {
+  display: none;
+}
+
+.contact-form-body .result {
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
