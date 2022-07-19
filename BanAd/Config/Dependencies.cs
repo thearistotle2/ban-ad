@@ -1,3 +1,5 @@
+using BanAd.Ads;
+
 namespace BanAd.Config;
 
 public static class Dependencies
@@ -22,6 +24,7 @@ public static class Dependencies
             return new RunOptions
             {
                 SiteId = env["SITE_ID"],
+                SiteBaseUrl = env["SITE_BASE_URL"].TrimEnd('/'),
                 AdSlotDeclarations = env["AD_SLOT_DECLARATIONS"],
                 AdsLocation = env["ADS_LOCATION"],
                 SupportedExtensions = extensions,
@@ -32,6 +35,7 @@ public static class Dependencies
         });
 
         services.AddSingleton<AdSlotsMonitor>();
+        services.AddSingleton<AdBuilder>();
     }
     
     private static IDictionary<string, string> GetEnvironmentVariables()

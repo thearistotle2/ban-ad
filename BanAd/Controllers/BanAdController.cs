@@ -1,19 +1,26 @@
 ﻿using System.Collections.Concurrent;
+using BanAd.Ads;
 using BanAd.Config;
 using BanAd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BanAd.Controllers;
 
+[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
 public class BanAdController : Controller
 {
     
+    private AdBuilder AdBuilder { get; }
     private AdSlotsMonitor AdSlots { get; }
     private RunOptions Config { get; }
     private static ConcurrentDictionary<string, DateTime> TimeTracker { get; } = new ();
 
-    public BanAdController(AdSlotsMonitor adSlots, RunOptions config)
+    public BanAdController(
+        AdBuilder adBuilder,
+        AdSlotsMonitor adSlots,
+        RunOptions config)
     {
+        AdBuilder = adBuilder;
         AdSlots = adSlots;
         Config = config;
     }
@@ -26,12 +33,14 @@ public class BanAdController : Controller
 
     public IActionResult Ad(string id)
     {
-        return new VirtualFileResult("~/TempImages/629B5C2E.png", "image/png");
+        var ad = AdBuilder.BuildAd(id);
+        return File(ad.Image(), ad.MimeType());
     }
 
     public IActionResult Out(string id)
     {
-        return Redirect("https://waxp.rentals");
+        var ad = AdBuilder.BuildAd(id);
+        return Redirect(ad.Link());
     }
 
     public IActionResult Advertise(string id)
@@ -54,5 +63,5 @@ public class BanAdController : Controller
             HoneypotName = Config.BotHoneypotName
         });
     }
-    
+
 }

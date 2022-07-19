@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y curl
 
 ENV ASPNETCORE_URLS=http://+:2022
 ENV SITE_ID=BanAd
+ENV SITE_BASE_URL=/ads
 ENV AD_SLOT_DECLARATIONS=/run/ad-slots
 ENV ADS_LOCATION=/run/ads
 ENV EXTENSIONS=.png;.jpg;.jpeg;.gif
