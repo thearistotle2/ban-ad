@@ -41,8 +41,7 @@ public class BanAdController : Controller
             return Content(string.Empty);
         }
         TimeTracker[Request.HttpContext.Connection.Id] = DateTime.UtcNow;
-
-        Console.WriteLine(Request.HttpContext.Connection.Id);
+        
         var mb = Math.DivRem(Config.MaxUploadSizeKiB, 1024);
         var adSlot = AdSlots.Value.Ads[id];
         return View(new AdvertiseViewModel
