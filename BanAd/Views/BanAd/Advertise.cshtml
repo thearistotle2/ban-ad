@@ -94,20 +94,27 @@ $('.form-notice-reveal').on('click', e => {
 
 $('#ad').on('input', () => {
     const input = $('#ad')[0];
+    input.setCustomValidity(''); // Reset.
+    
     const file = input.files[0]; 
     if (file)
     {
       // Check size.
       const kb = file.size / 1024;
       if (kb > @Model.MaxSizeKiB) {
-          input.setCustomValidity('File must be no greater than ' + @Model.MaxSizeKiB + 'kb.');
-          return;
+          input.setCustomValidity('File must be no greater than @Model.MaxSizeKiB' + 'kb.');
+      } else {
+          // Check dimensions.
+          const creator = window.URL || window.webkitURL;
+          const image = new Image();
+          image.onload = () => {
+              if (image.width !== @Model.AdSlotInfo.Width || image.height !== @Model.AdSlotInfo.Height) {
+                  input.setCustomValidity('Image must be @Model.AdSlotInfo.Width pixels wide x @Model.AdSlotInfo.Height pixels high.');
+              }
+          };
+          image.src = creator.createObjectURL(file);
       }
-      
-      // Check dimensions.
-      
     }
-    input.setCustomValidity('');
 });
 </script>
 
