@@ -91,6 +91,24 @@ $('.form-notice-reveal').on('click', e => {
   $('.form-notice').show();
   $('.form-notice-reveal').hide();
 });
+
+$('#ad').on('input', () => {
+    const input = $('#ad')[0];
+    const file = input.files[0]; 
+    if (file)
+    {
+      // Check size.
+      const kb = file.size / 1024;
+      if (kb > @Model.MaxSizeKiB) {
+          input.setCustomValidity('File must be no greater than ' + @Model.MaxSizeKiB + 'kb.');
+          return;
+      }
+      
+      // Check dimensions.
+      
+    }
+    input.setCustomValidity('');
+});
 </script>
 
 </body>
