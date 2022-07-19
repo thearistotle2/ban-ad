@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Home Page - BanAd.Demo</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css"/>
-    <style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home Page - BanAd.Demo</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css"/>
+  <style>
         html{font-size:14px}@@media (min-width:768px){html{font-size:16px}}html{position:relative;min-height:100%}body{margin-bottom:60px}body.contact-form-body{font-family:'Lato',georgia;font-size:25px;color:rgba(255,255,255,1);background-color:rgba(236,181,62,.95);text-align:center;font-weight:300;-webkit-font-smoothing:antialiased}.contact-form-body #contact-form{max-width:90%;margin:50px auto;padding-top:50px;border-top:2px dashed rgba(255,255,255,.5);border-bottom:2px dashed rgba(255,255,255,.5)}.contact-form-body label{font-weight:400;cursor:pointer}.contact-form-body input{border:none;outline:none;border-radius:0;text-align:center;background:0 0;font-weight:700;font-family:'Lato',georgia;font-size:25px;color:rgba(255,255,255,1);max-width:90%;padding:1rem;border:2px dashed rgba(255,255,255,0);box-sizing:border-box;cursor:text}.contact-form-body input{border-bottom:2px dashed rgba(255,255,255,.5)}.contact-form-body input:required{border-bottom:2px dashed rgba(255,255,255,.5)}
         .contact-form-body input:focus{border-bottom:2px dashed rgba(255,255,255,1);background-color:rgba(255,255,255,.2)}.contact-form-body input:required:valid{border-bottom:2px solid rgba(255,255,255,.2)}.contact-form-body input:required:invalid{color:rgba(255,255,255,.5)}.contact-form-body ::-webkit-input-placeholder{text-align:center;color:rgba(255,255,255,.4);font-style:italic;font-weight:400}.contact-form-body :-moz-placeholder{text-align:center;color:rgba(255,255,255,.4);font-style:italic;font-weight:400}.contact-form-body ::-moz-placeholder{text-align:center;color:rgba(255,255,255,.4);font-style:italic;font-weight:400}.contact-form-body :-ms-input-placeholder{text-align:center;color:rgba(255,255,255,.4);font-style:italic;font-weight:400}.contact-form-body .expanding{vertical-align:top}.contact-form-body .send-icn{fill:rgba(255,255,255,1)}.contact-form-body .send-icn:hover{fill:rgba(0,0,0,1);cursor:pointer}.contact-form-body button{background:0 0;border:none;outline:none;margin:2vmax}.contact-form-body button:hover small{opacity:1}
         .contact-form-body small{display:block;opacity:0}.contact-form-body .website,footer{opacity:1;font-size:16px;color:#fff;position:relative;text-align:center;display:block;margin-top:60px}.contact-form-body .website a,footer .form-notice-reveal a{color:#fff}.contact-form-body footer small{opacity:1;max-width:60%;margin:0 auto}.contact-form-body footer .form-notice{display:none}.contact-form-body strong{font-weight:700}.contact-form-body .intro{margin-top:60px}.contact-form-body input[type=file]::file-selector-button{display:none}.contact-form-body input[type=file]{text-align-last:center}.contact-form-body input[type=number]::-webkit-outer-spin-button,.contact-form-body input[type=number]::-webkit-inner-spin-button{display:none}.contact-form-body input[type=number]{-moz-appearance:textfield}.contact-form-body #contact-form p:first-of-type input:first-of-type{display:none}
@@ -16,63 +16,63 @@
 <body class="contact-form-body">
 
 <div class="intro">
-    <p>Looking to advertise?</p>
-    <p>This ad space goes for <strong>@Model.AdSlotInfo.BanPerHour BAN</strong> per hour.</p>
-    <p>Send me your ad and I'll send you an invoice.</p>
+  <p>Looking to advertise?</p>
+  <p>This ad space goes for <strong>@Model.AdSlotInfo.BanPerHour BAN</strong> per hour.</p>
+  <p>Send me your ad and I'll send you an invoice.</p>
 </div>
 
-<form id="contact-form">
-    <p>
-        I want this <strong>@Model.AdSlotInfo.Width x @Model.AdSlotInfo.Height</strong> ad slot for
-        <input type="text" name="@Model.HoneypotName" id="@Model.HoneypotName"/>
-    </p>
-    <p>
-        <input type="number" name="days" id="days" min="0" max="9999" step="1" placeholder="#">
-        <label for="days">days</label> and
-        <input type="number" name="hours" id="hours" min="1" max="9999" step="1" minlength="3" placeholder="#" required>
-        <label for="hours">hours</label>.
-    </p>
-    <p>
-        My
-        <label for="email">email address</label> is
-        <input type="email" name="your-email" id="email" placeholder="@@" required>.
-    </p>
-    <p>
-        I've made sure my <label for="ad">ad</label> is no more than <strong>@Model.MaxSizeDisplay</strong> and attached it:
-    </p>
-    <p>
-        <input type="file" name="ad" id="ad" accept="@string.Join(",", Model.SupportedExtensions)" required>
-    </p>
-    <p>
-        <button type="submit">
-            <svg version="1.1" class="send-icn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="36px" viewBox="0 0 100 36" enable-background="new 0 0 100 36" xml:space="preserve">
-                <path d="M100,0L100,0 M23.8,7.1L100,0L40.9,36l-4.7-7.5L22,34.8l-4-11L0,30.5L16.4,8.7l5.4,15L23,7L23.8,7.1z M16.8,20.4l-1.5-4.3
-	l-5.1,6.7L16.8,20.4z M34.4,25.4l-8.1-13.1L25,29.6L34.4,25.4z M35.2,13.2l8.1,13.1L70,9.9L35.2,13.2z"/>
-            </svg>
-            <small>send</small>
-        </button>
-    </p>
-    @Html.AntiForgeryToken()
+<form id="contact-form" method="post" enctype="multipart/form-data">
+  <p>
+    I want this <strong>@Model.AdSlotInfo.Width x @Model.AdSlotInfo.Height</strong> ad slot for
+    <input type="text" name="@Model.HoneypotName" id="@Model.HoneypotName"/>
+  </p>
+  <p>
+    <input type="number" name="days" id="days" min="0" max="9999" step="1" placeholder="#">
+    <label for="days">days</label> and
+    <input type="number" name="hours" id="hours" min="1" max="9999" step="1" minlength="3" placeholder="#" required>
+    <label for="hours">hours</label>.
+  </p>
+  <p>
+    My
+    <label for="email">email address</label> is
+    <input type="email" name="email" id="email" placeholder="@@" required>.
+  </p>
+  <p>
+    I've made sure my <label for="ad">ad</label> is no more than <strong>@Model.MaxSizeDisplay</strong> and attached it:
+  </p>
+  <p>
+    <input type="file" name="ad" id="ad" accept="@string.Join(",", Model.SupportedExtensions)" required>
+  </p>
+  <p>
+    <input type="hidden" name="id" id="id" value="@Model.AdSlotId"/>
+    <button type="submit">
+      <svg version="1.1" class="send-icn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="36px" viewBox="0 0 100 36" enable-background="new 0 0 100 36" xml:space="preserve">
+        <path d="M100,0L100,0 M23.8,7.1L100,0L40.9,36l-4.7-7.5L22,34.8l-4-11L0,30.5L16.4,8.7l5.4,15L23,7L23.8,7.1z M16.8,20.4l-1.5-4.3l-5.1,6.7L16.8,20.4z M34.4,25.4l-8.1-13.1L25,29.6L34.4,25.4z M35.2,13.2l8.1,13.1L70,9.9L35.2,13.2z"/>
+      </svg>
+      <small>send</small>
+    </button>
+  </p>
+  @Html.AntiForgeryToken()
 </form>
 
 <footer>
-    <small class="form-notice-reveal">
-        <a href="#">form copyright/license</a>
-    </small>
-    <div class="form-notice">
-        <p>
-            <small>Copyright (c) 2022 by Erlen (https://codepen.io/erlenmasson/pen/azVZXQ)</small>
-        </p>
-        <p>
-            <small>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</small>
-        </p>
-        <p>
-            <small>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</small>
-        </p>
-        <p>
-            <small>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</small>
-        </p>
-    </div>
+  <small class="form-notice-reveal">
+    <a href="#">form copyright/license</a>
+  </small>
+  <div class="form-notice">
+    <p>
+      <small>Copyright (c) 2022 by Erlen (https://codepen.io/erlenmasson/pen/azVZXQ)</small>
+    </p>
+    <p>
+      <small>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</small>
+    </p>
+    <p>
+      <small>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</small>
+    </p>
+    <p>
+      <small>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</small>
+    </p>
+  </div>
 </footer>
 
 <script
