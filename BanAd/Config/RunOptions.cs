@@ -13,4 +13,11 @@ public class RunOptions
     
     public string BotHoneypotName { get; set; }
     public int BotMinSeconds { get; set; }
+    
+    public string SmtpServer { get; set; }
+    public int SmtpPort { get; set; }
+    public string EmailAddress { get; set; }
+    public string EmailPassword { get; set; }
+    public string EmailUsername { get; set; }
+    public string EmailDisplayName { get; set; }
 }

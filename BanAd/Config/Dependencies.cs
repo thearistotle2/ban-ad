@@ -1,4 +1,6 @@
 using BanAd.Ads;
+using BanAd.Processing.Connectors;
+using BanAd.Processing.Workflow;
 
 namespace BanAd.Config;
 
@@ -21,6 +23,16 @@ public static class Dependencies
             var minSeconds = int.Parse(env["BOT_MIN_SECONDS"]);
             if (minSeconds < 1) { minSeconds = 1; }
 
+            string password = env.ContainsKey("EMAIL_PASSWORD_FILE")
+                ? File.ReadAllText(env["EMAIL_PASSWORD_FILE"])
+                : env["EMAIL_PASSWORD"];
+            string username = env.ContainsKey("EMAIL_USERNAME")
+                ? env["EMAIL_USERNAME"]
+                : env["EMAIL_ADDRESS"];
+            string displayName = env.ContainsKey("EMAIL_DISPLAY_NAME")
+                ? env["EMAIL_DISPLAY_NAME"]
+                : env["EMAIL_ADDRESS"];
+
             return new RunOptions
             {
                 SiteId = env["SITE_ID"],
@@ -30,12 +42,21 @@ public static class Dependencies
                 SupportedExtensions = extensions,
                 MaxUploadSizeKiB = maxSize,
                 BotHoneypotName = env["BOT_HONEYPOT_NAME"],
-                BotMinSeconds = minSeconds
+                BotMinSeconds = minSeconds,
+                SmtpServer = env["SMTP_SERVER"],
+                SmtpPort = int.Parse(env["SMTP_PORT"]),
+                EmailAddress = env["EMAIL_ADDRESS"],
+                EmailPassword = password,
+                EmailUsername = username,
+                EmailDisplayName = displayName
             };
         });
 
         services.AddSingleton<AdSlotsMonitor>();
         services.AddSingleton<AdBuilder>();
+        services.AddSingleton<AdValidator>();
+        services.AddSingleton<AdSubmissionProcessor>();
+        services.AddSingleton<EmailConnector>();
     }
     
     private static IDictionary<string, string> GetEnvironmentVariables()

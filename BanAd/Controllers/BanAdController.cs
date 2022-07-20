@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using BanAd.Ads;
 using BanAd.Config;
+using BanAd.Processing.Workflow;
 using BanAd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -12,16 +13,19 @@ namespace BanAd.Controllers;
 public class BanAdController : Controller
 {
     private AdBuilder AdBuilder { get; }
+    private AdSubmissionProcessor Processor { get; }
     private AdSlotsMonitor AdSlots { get; }
     private RunOptions Config { get; }
     private static ConcurrentDictionary<string, DateTime> TimeTracker { get; } = new();
 
     public BanAdController(
         AdBuilder adBuilder,
+        AdSubmissionProcessor processor,
         AdSlotsMonitor adSlots,
         RunOptions config)
     {
         AdBuilder = adBuilder;
+        Processor = processor;
         AdSlots = adSlots;
         Config = config;
     }
@@ -96,6 +100,7 @@ public class BanAdController : Controller
             else
             {
                 // We have data and we don't think it's from a bot.  Let's go!
+                return Json(await Processor.ProcessSubmission(model));
             }
 
             return Json(new AdvertiseResult { Success = true });
