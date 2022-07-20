@@ -157,30 +157,33 @@ $('#contact-form').on('submit', function submit (e) {
   {
     submitting = true;
     $('.submit-swap').toggleClass('hidden');
-    try {
-      axios.post(this.action, new FormData(this))
-           .then(response => {
-             if (response.data.success) {
-               $('.result-success').removeClass('hidden');
-             } else {
-               const errors = $('.result-failure-errors');
-               errors.empty();
-               $.each(response.data.errors, function () {
-                 errors.append($('<p>' + this + '</p>'));
-               });
-               $('.result-failure').removeClass('hidden');
-               $('.submit-swap').toggleClass('hidden');
-               submitting = false;
-             }
-             $('.contact-form-main').addClass('hidden');
-           });
-    }
-    catch {
-      $('.submit-swap').toggleClass('hidden');
-      submitting = false;
-    }
+    axios.post(this.action, new FormData(this))
+      .then(response => {
+        if (response.data.success) {
+          $('.result-success').removeClass('hidden');
+        } else {
+          error(response.data.errors);
+        }
+        $('.contact-form-main').addClass('hidden');
+        submitting = false;
+      })
+      .catch(err => {
+        error([err.message]);
+        $('.contact-form-main').addClass('hidden');
+        submitting = false;
+      });
   }
 });
+
+function error(reasons) {
+  const errors = $('.result-failure-errors');
+  errors.empty();
+  $.each(reasons, function () {
+    errors.append($('<p>' + this + '</p>'));
+  });
+  $('.result-failure').removeClass('hidden');
+  $('.submit-swap').toggleClass('hidden');
+}
 
 $('.go-back').on('click', function goBack (e) {
   e.preventDefault();
