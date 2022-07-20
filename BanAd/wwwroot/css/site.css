@@ -145,8 +145,8 @@ body.contact-form-body {
   opacity: 0;
 }
 
-.contact-form-body .website, 
-footer {
+.contact-form-body .website,
+.contact-form-body footer {
   opacity: 1;
   font-size: 16px;
   color: white;
@@ -157,7 +157,8 @@ footer {
 }
 
 .contact-form-body .website a,
-footer .form-notice-reveal a {
+.contact-form-body .result-failure a,
+.contact-form-body footer .form-notice-reveal a {
   color: white;
 }
 

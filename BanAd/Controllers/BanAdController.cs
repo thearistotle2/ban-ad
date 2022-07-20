@@ -33,6 +33,11 @@ public class BanAdController : Controller
         var id = $"{Guid.NewGuid().GetHashCode():X}";
         return Content(id);
     }
+    
+    public IActionResult Upcoming(string id)
+    {
+        throw new NotImplementedException();
+    }
 
     #endregion
 
@@ -49,15 +54,6 @@ public class BanAdController : Controller
         var ad = AdBuilder.BuildAd(id);
         return Redirect(ad.Link());
     }
-    
-    #region " Preview Ads "
-    
-    public IActionResult Upcoming(string id)
-    {
-        throw new NotImplementedException();
-    }
-    
-    #endregion
 
     #endregion
 
