@@ -129,7 +129,8 @@ body.contact-form-body {
   cursor: pointer;
 }
 
-.contact-form-body button {
+.contact-form-body button,
+.contact-form-body .spinning-loader {
   background: none;
   border: none;
   outline: none;
@@ -156,9 +157,7 @@ body.contact-form-body {
   margin-top: 60px;
 }
 
-.contact-form-body .website a,
-.contact-form-body .result-failure a,
-.contact-form-body footer .form-notice-reveal a {
+.contact-form-body a {
   color: white;
 }
 

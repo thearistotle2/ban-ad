@@ -9,10 +9,10 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css"/>
   <style>
         html{font-size:14px}@@media (min-width:768px){html{font-size:16px}}html{position:relative;min-height:100%}body{margin-bottom:60px}body.contact-form-body{font-family:'Lato',georgia;font-size:25px;color:rgba(255,255,255,1);background-color:rgba(236,181,62,.95);text-align:center;font-weight:300;-webkit-font-smoothing:antialiased}.contact-form-body #contact-form{max-width:90%;margin:50px auto;padding-top:50px;border-top:2px dashed rgba(255,255,255,.5);border-bottom:2px dashed rgba(255,255,255,.5)}.contact-form-body label{font-weight:400;cursor:pointer}.contact-form-body input{border:none;outline:none;border-radius:0;text-align:center;background:0 0;font-weight:700;font-family:'Lato',georgia;font-size:25px;color:rgba(255,255,255,1);max-width:90%;padding:1rem;border:2px dashed rgba(255,255,255,0);box-sizing:border-box;cursor:text}.contact-form-body input{border-bottom:2px dashed rgba(255,255,255,.5)}.contact-form-body input:required{border-bottom:2px dashed rgba(255,255,255,.5)}
-        .contact-form-body input:focus{border-bottom:2px dashed rgba(255,255,255,1);background-color:rgba(255,255,255,.2)}.contact-form-body input:required:valid{border-bottom:2px solid rgba(255,255,255,.2)}.contact-form-body input:required:invalid{color:rgba(255,255,255,.5)}.contact-form-body ::-webkit-input-placeholder{text-align:center;color:rgba(255,255,255,.4);font-style:italic;font-weight:400}.contact-form-body :-moz-placeholder{text-align:center;color:rgba(255,255,255,.4);font-style:italic;font-weight:400}.contact-form-body ::-moz-placeholder{text-align:center;color:rgba(255,255,255,.4);font-style:italic;font-weight:400}.contact-form-body :-ms-input-placeholder{text-align:center;color:rgba(255,255,255,.4);font-style:italic;font-weight:400}.contact-form-body .expanding{vertical-align:top}.contact-form-body .send-icn{fill:rgba(255,255,255,1)}.contact-form-body .send-icn:hover{fill:rgba(0,0,0,1);cursor:pointer}.contact-form-body button{background:0 0;border:none;outline:none;margin:2vmax}.contact-form-body button:hover small{opacity:1}
-        .contact-form-body small{display:block;opacity:0}.contact-form-body .website,.contact-form-body footer{opacity:1;font-size:16px;color:#fff;position:relative;text-align:center;display:block;margin-top:60px}.contact-form-body .website a,.contact-form-body .result-failure a,.contact-form-body footer .form-notice-reveal a{color:#fff}.contact-form-body footer small{opacity:1;max-width:60%;margin:0 auto}.contact-form-body footer .form-notice{display:none}.contact-form-body strong{font-weight:700}.contact-form-body .intro{margin-top:60px}.contact-form-body input[type=file]::file-selector-button{display:none}.contact-form-body input[type=file]{text-align-last:center}.contact-form-body input[type=number]::-webkit-outer-spin-button,.contact-form-body input[type=number]::-webkit-inner-spin-button{display:none}.contact-form-body input[type=number]{-moz-appearance:textfield}.contact-form-body #contact-form p:first-of-type input:first-of-type{display:none}.contact-form-body .hidden{display:none}.contact-form-body .result{margin-top:80px;margin-bottom:80px}
+        .contact-form-body input:focus{border-bottom:2px dashed rgba(255,255,255,1);background-color:rgba(255,255,255,.2)}.contact-form-body input:required:valid{border-bottom:2px solid rgba(255,255,255,.2)}.contact-form-body input:required:invalid{color:rgba(255,255,255,.5)}.contact-form-body ::-webkit-input-placeholder{text-align:center;color:rgba(255,255,255,.4);font-style:italic;font-weight:400}.contact-form-body :-moz-placeholder{text-align:center;color:rgba(255,255,255,.4);font-style:italic;font-weight:400}.contact-form-body ::-moz-placeholder{text-align:center;color:rgba(255,255,255,.4);font-style:italic;font-weight:400}.contact-form-body :-ms-input-placeholder{text-align:center;color:rgba(255,255,255,.4);font-style:italic;font-weight:400}.contact-form-body .expanding{vertical-align:top}.contact-form-body .send-icn{fill:rgba(255,255,255,1)}.contact-form-body .send-icn:hover{fill:rgba(0,0,0,1);cursor:pointer}.contact-form-body button,.contact-form-body .spinning-loader{background:0 0;border:none;outline:none;margin:2vmax}
+        .contact-form-body button:hover small{opacity:1}.contact-form-body small{display:block;opacity:0}.contact-form-body .website,.contact-form-body footer{opacity:1;font-size:16px;color:#fff;position:relative;text-align:center;display:block;margin-top:60px}.contact-form-body a{color:#fff}.contact-form-body footer small{opacity:1;max-width:60%;margin:0 auto}.contact-form-body footer .form-notice{display:none}.contact-form-body strong{font-weight:700}.contact-form-body .intro{margin-top:60px}.contact-form-body input[type=file]::file-selector-button{display:none}.contact-form-body input[type=file]{text-align-last:center}.contact-form-body input[type=number]::-webkit-outer-spin-button,.contact-form-body input[type=number]::-webkit-inner-spin-button{display:none}.contact-form-body input[type=number]{-moz-appearance:textfield}.contact-form-body #contact-form p:first-of-type input:first-of-type{display:none}.contact-form-body .hidden{display:none}.contact-form-body .result{margin-top:80px;margin-bottom:80px}
     </style>
-  @* <link rel="stylesheet" href="/css/site.css" type="text/css"/> *@
+  @* <link rel="stylesheet" href="/css/advertise.css" type="text/css"/> *@
 </head>
 <body class="contact-form-body">
 
@@ -47,12 +47,17 @@
     </p>
     <p>
       <input type="hidden" name="id" id="id" value="@Model.AdSlotId"/>
-      <button type="submit">
+      <button class="submit-button submit-swap" type="submit">
         <svg version="1.1" class="send-icn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="36px" viewBox="0 0 100 36" enable-background="new 0 0 100 36" xml:space="preserve">
           <path d="M100,0L100,0 M23.8,7.1L100,0L40.9,36l-4.7-7.5L22,34.8l-4-11L0,30.5L16.4,8.7l5.4,15L23,7L23.8,7.1z M16.8,20.4l-1.5-4.3l-5.1,6.7L16.8,20.4z M34.4,25.4l-8.1-13.1L25,29.6L34.4,25.4z M35.2,13.2l8.1,13.1L70,9.9L35.2,13.2z"/>
         </svg>
         <small>send</small>
       </button>
+      <svg class="hidden spinning-loader submit-swap" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="48px" height="48px" viewBox="0 0 128 128" xml:space="preserve">
+        <g>
+          <path d="M61.5.25h5a25.7 25.7 0 0 1 5.2 8.95A26.25 26.25 0 0 1 73 19.97l-4.98.1A23.3 23.3 0 0 0 67 10.2 32.2 32.2 0 0 0 61.5.27zm16.6 1.53l4.8 1.3a25.7 25.7 0 0 1 2.74 10A26.25 26.25 0 0 1 84.1 23.8l-4.83-1.2a23.3 23.3 0 0 0 1.54-9.8 32.2 32.2 0 0 0-2.7-11zm15.62 5.76l4.3 2.5a25.7 25.7 0 0 1 .06 10.37 26.25 26.25 0 0 1-4.25 10L89.46 28a23.3 23.3 0 0 0 4.02-9.08 32.2 32.2 0 0 0 .24-11.35zm13.6 9.62l3.52 3.52a25.7 25.7 0 0 1-2.64 10.04 26.24 26.24 0 0 1-6.68 8.52l-3.6-3.44a23.28 23.28 0 0 0 6.23-7.72 32.2 32.2 0 0 0 3.17-10.92zm10.65 12.8l2.5 4.32a25.7 25.7 0 0 1-5.16 9 26.24 26.24 0 0 1-8.6 6.5l-2.6-4.25a23.3 23.3 0 0 0 8-5.84 32.2 32.2 0 0 0 5.9-9.8zm6.96 15.13l1.3 4.8a25.7 25.7 0 0 1-7.3 7.3 26.25 26.25 0 0 1-10.06 4l-1.4-4.8a23.3 23.3 0 0 0 9.26-3.6 32.18 32.18 0 0 0 8.2-7.9zm2.82 16.4v5a25.7 25.7 0 0 1-8.96 5.2A26.25 26.25 0 0 1 108 73l-.1-4.97a23.28 23.28 0 0 0 9.9-1.03 32.2 32.2 0 0 0 9.95-5.5zm-1.53 16.6l-1.3 4.8a25.7 25.7 0 0 1-10 2.7A26.24 26.24 0 0 1 104.2 84l1.2-4.84a23.28 23.28 0 0 0 9.8 1.54 32.18 32.18 0 0 0 11.02-2.7zm-5.76 15.6l-2.5 4.3a25.7 25.7 0 0 1-10.37 0 26.24 26.24 0 0 1-10-4.3l2.4-4.4a23.28 23.28 0 0 0 9 4 32.2 32.2 0 0 0 11.3.23zm-9.62 13.6l-3.52 3.5a25.7 25.7 0 0 1-10.04-2.7 26.24 26.24 0 0 1-8.52-6.7l3.44-3.6a23.28 23.28 0 0 0 7.72 6.2 32.2 32.2 0 0 0 10.92 3.13zm-12.8 10.6l-4.32 2.5a25.7 25.7 0 0 1-9-5.2 26.24 26.24 0 0 1-6.5-8.7l4.25-2.6a23.3 23.3 0 0 0 5.84 8 32.2 32.2 0 0 0 9.8 5.9zm-15.14 7l-4.8 1.3a25.7 25.7 0 0 1-7.38-7.3 26.24 26.24 0 0 1-4.04-10.1l4.78-1.4a23.28 23.28 0 0 0 3.57 9.2 32.18 32.18 0 0 0 7.88 8.2zm-33 1.3l-4.8-1.3a25.7 25.7 0 0 1-2.74-10 26.26 26.26 0 0 1 1.53-10.8l4.8 1.2a23.3 23.3 0 0 0-1.6 9.8 32.2 32.2 0 0 0 2.7 11zm-15.62-5.8l-4.3-2.5a25.7 25.7 0 0 1-.06-10.4 26.26 26.26 0 0 1 4.25-10l4.37 2.4a23.3 23.3 0 0 0-4.02 9.1 32.2 32.2 0 0 0-.24 11.3zm-13.6-9.6l-3.52-3.5a25.7 25.7 0 0 1 2.64-10 26.25 26.25 0 0 1 6.68-8.5l3.6 3.4a23.3 23.3 0 0 0-6.23 7.7 32.2 32.2 0 0 0-3.17 10.9zM10.04 98l-2.5-4.3a25.7 25.7 0 0 1 5.15-9 26.25 26.25 0 0 1 8.6-6.5l2.6 4.24a23.3 23.3 0 0 0-8 5.85A32.2 32.2 0 0 0 10 98zM3.07 82.9l-1.3-4.83a25.7 25.7 0 0 1 7.3-7.37 26.25 26.25 0 0 1 10.06-4.03l1.4 4.78a23.3 23.3 0 0 0-9.26 3.57 32.2 32.2 0 0 0-8.2 7.87zM.25 66.45V61.5a25.7 25.7 0 0 1 8.96-5.24 26.24 26.24 0 0 1 10.8-1.3l.1 4.98A23.28 23.28 0 0 0 10.2 61a32.2 32.2 0 0 0-9.94 5.47zM1.78 49.9l1.3-4.83a25.7 25.7 0 0 1 10-2.73 26.24 26.24 0 0 1 10.72 1.53l-1.2 4.84a23.28 23.28 0 0 0-9.8-1.5 32.18 32.18 0 0 0-11 2.7zm5.76-15.64l2.5-4.32a25.7 25.7 0 0 1 10.37-.04 26.24 26.24 0 0 1 10 4.25L28 38.52a23.28 23.28 0 0 0-9.08-4.02 32.18 32.18 0 0 0-11.35-.24zm9.62-13.6l3.52-3.52a25.7 25.7 0 0 1 10.04 2.64 26.25 26.25 0 0 1 8.52 6.68l-3.44 3.6a23.3 23.3 0 0 0-7.72-6.23 32.18 32.18 0 0 0-10.92-3.17zM29.96 10l4.32-2.48a25.7 25.7 0 0 1 9 5.15 26.25 26.25 0 0 1 6.5 8.66l-4.25 2.58a23.3 23.3 0 0 0-5.84-8 32.2 32.2 0 0 0-9.8-5.9zM45.1 3.05l4.8-1.3a25.7 25.7 0 0 1 7.38 7.3 26.25 26.25 0 0 1 4.04 10.07l-4.78 1.4a23.3 23.3 0 0 0-3.57-9.26 32.2 32.2 0 0 0-7.88-8.2zm21.4 124.7h-5a25.7 25.7 0 0 1-5.22-8.96 26.26 26.26 0 0 1-1.3-10.8l4.98-.1a23.3 23.3 0 0 0 1.04 9.9 32.2 32.2 0 0 0 5.5 9.9z" fill="#ffffff"/><animateTransform attributeName="transform" type="rotate" from="0 64 64" to="15 64 64" dur="450ms" repeatCount="indefinite"></animateTransform>
+        </g>
+      </svg>
     </p>
     @Html.AntiForgeryToken()
   </form>
@@ -86,6 +91,11 @@
     </p>
     <p>
       <small>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</small>
+    </p>
+  </div>
+  <div class="icon-notice">
+    <p>
+      <small>spinning loader by <a href="https://icons8.com/">icons8</a></small>
     </p>
   </div>
 </footer>
@@ -146,6 +156,7 @@ $('#contact-form').on('submit', function submit (e) {
   if (!submitting)
   {
     submitting = true;
+    $('.submit-swap').toggleClass('hidden');
     try {
       axios.post(this.action, new FormData(this))
            .then(response => {
@@ -154,16 +165,18 @@ $('#contact-form').on('submit', function submit (e) {
              } else {
                const errors = $('.result-failure-errors');
                errors.empty();
-               console.log(response.data.errors);
                $.each(response.data.errors, function () {
                  errors.append($('<p>' + this + '</p>'));
                });
                $('.result-failure').removeClass('hidden');
+               $('.submit-swap').toggleClass('hidden');
+               submitting = false;
              }
              $('.contact-form-main').addClass('hidden');
            });
     }
-    finally {
+    catch {
+      $('.submit-swap').toggleClass('hidden');
       submitting = false;
     }
   }
