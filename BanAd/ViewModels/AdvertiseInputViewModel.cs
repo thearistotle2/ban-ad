@@ -18,6 +18,10 @@ public class AdvertiseInputViewModel
     [Required, MinLength(3), RegularExpression(@"^[^@]+@[^@]+$")]
     public string Email { get; set; }
     
+    // Very simple: just make sure there is http, ://, and at least one other character.
+    [Required, MinLength(8), RegularExpression(@"^[Hh][Tt][Tt][Pp][Ss]?:\/\/.+$")]
+    public string Link { get; set; }
+    
     [Required]
     public IFormFile Ad { get; set; }
     

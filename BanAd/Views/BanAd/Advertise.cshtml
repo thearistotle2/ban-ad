@@ -46,6 +46,11 @@
       <input type="file" name="ad" id="ad" accept="@string.Join(",", Model.SupportedExtensions)" required>
     </p>
     <p>
+      Please <label for="link">link</label> the ad to
+      <input type="url" name="link" id="link" placeholder="https://" required>
+      when you serve it.
+    </p>
+    <p>
       <input type="hidden" name="id" id="id" value="@Model.AdSlotId"/>
       <button class="submit-button submit-swap" type="submit">
         <svg version="1.1" class="send-icn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="36px" viewBox="0 0 100 36" enable-background="new 0 0 100 36" xml:space="preserve">

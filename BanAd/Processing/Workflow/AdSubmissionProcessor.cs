@@ -10,12 +10,14 @@ public class AdSubmissionProcessor
     
     private AdSlotsMonitor AdSlots { get; }
     private AdValidator Validator { get; }
+    private FileConnector Files { get; }
     private EmailConnector Email { get; }
 
-    public AdSubmissionProcessor(AdSlotsMonitor adSlots, AdValidator validator, EmailConnector email)
+    public AdSubmissionProcessor(AdSlotsMonitor adSlots, AdValidator validator, FileConnector files, EmailConnector email)
     {
         AdSlots = adSlots;
         Validator = validator;
+        Files = files;
         Email  = email;
     }
 
@@ -30,11 +32,12 @@ public class AdSubmissionProcessor
         var submitted = Map(model);
         
         // Save ad.
+        var (adId, banano) = Files.SaveAdSubmission(submitted);
 
         // Email submitter and site owner.
-        var submitter = Email.SendAdSubmitted(submitted);
-        
-        await Task.WhenAll(submitter);
+        var submitter = Email.SendAdSubmitted(submitted, banano);
+        var approver = Email.SendAdForApproval(submitted, adId);
+        await Task.WhenAll(submitter, approver);
 
         return new AdvertiseResult { Success = true };
     }
@@ -50,6 +53,7 @@ public class AdSubmissionProcessor
             Hours = hours,
             Banano = hours * AdSlots.Value.Ads[model.Id].BanPerHour,
             SubmitterEmail = model.Email,
+            AdLink = model.Link,
             AdFilename = model.Id + Path.GetExtension(model.Ad.FileName),
             Ad = () => model.Ad.OpenReadStream()
         };

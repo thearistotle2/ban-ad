@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using BanAd.Config;
+using BanAd.Processing.Connectors;
 using BanAd.ViewModels;
 using Microsoft.AspNetCore.StaticFiles;
 using SixLabors.ImageSharp;
@@ -13,21 +14,42 @@ public class AdBuilder
 {
      
     private AdSlotsMonitor AdSlots { get; }
+    private FileConnector Files { get; }
     private RunOptions Config { get; }
     private FileExtensionContentTypeProvider MimeTypeProvider { get; } = new();
 
-    public AdBuilder(AdSlotsMonitor adSlots, RunOptions config)
+    public AdBuilder(AdSlotsMonitor adSlots, FileConnector files, RunOptions config)
     {
         AdSlots = adSlots;
+        Files = files;
         Config = config;
     }
 
     public Ad BuildAd(string id)
     {
         // If we have an ad, serve it.
+        var (file, link) = Files.CurrentAd(id);
+        if (file != null)
+        {
+            return BuildAdFromFile(file, link);
+        }
         
         // Otherwise, serve a default ad.
         return BuildDefault(id);
+    }
+
+    private Ad BuildAdFromFile(string file, string link)
+    {
+        return new Ad
+        {
+            Link = () => link,
+            Image = () => File.ReadAllBytes(file),
+            MimeType = () =>
+            {
+                MimeTypeProvider.TryGetContentType(file, out string type);
+                return type ?? "image/png";
+            }
+        };
     }
 
     private Ad BuildDefault(string id)
@@ -39,16 +61,7 @@ public class AdBuilder
             var adSlot = AdSlots.Value.Ads[id];
             if (adSlot.DefaultImage != null)
             {
-                return new Ad
-                {
-                    Link = () => adSlot.DefaultLink ?? advertise,
-                    Image = () => File.ReadAllBytes(adSlot.DefaultImage),
-                    MimeType = () =>
-                    {
-                        MimeTypeProvider.TryGetContentType(adSlot.DefaultImage, out string type);
-                        return type ?? "image/png";
-                    }
-                };
+                return BuildAdFromFile(adSlot.DefaultImage, adSlot.DefaultLink ?? advertise);
             }
             
             return new Ad

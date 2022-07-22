@@ -48,7 +48,8 @@ public static class Dependencies
                 EmailAddress = env["EMAIL_ADDRESS"],
                 EmailPassword = password,
                 EmailUsername = username,
-                EmailDisplayName = displayName
+                EmailDisplayName = displayName,
+                AdApproverEmail = env["AD_APPROVER_EMAIL"]
             };
         });
 
@@ -57,6 +58,7 @@ public static class Dependencies
         services.AddSingleton<AdValidator>();
         services.AddSingleton<AdSubmissionProcessor>();
         services.AddSingleton<EmailConnector>();
+        services.AddSingleton<FileConnector>();
     }
     
     private static IDictionary<string, string> GetEnvironmentVariables()
