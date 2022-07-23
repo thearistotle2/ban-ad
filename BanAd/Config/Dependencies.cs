@@ -75,7 +75,9 @@ public static class Dependencies
                 EmailPassword = password,
                 EmailUsername = username,
                 EmailDisplayName = displayName,
-                AdApproverEmail = env["AD_APPROVER_EMAIL"]
+                AdApproverEmail = env["AD_APPROVER_EMAIL"],
+                BananoPaymentAddress = env["BANANO_PAYMENT_ADDRESS"],
+                BananoNode = env["BANANO_NODE"]
             };
         });
 
@@ -83,6 +85,7 @@ public static class Dependencies
         services.AddSingleton<AdBuilder>();
         services.AddSingleton<AdValidator>();
         services.AddSingleton<AdSubmissionProcessor>();
+        services.AddSingleton<BananoConnector>();
         services.AddSingleton<EmailConnector>();
         services.AddSingleton<FileConnector>();
         

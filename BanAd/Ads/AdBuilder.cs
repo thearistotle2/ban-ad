@@ -67,7 +67,7 @@ public class AdBuilder
             return new Ad
             {
                 Link = () => advertise,
-                Image = () => BuildDefaultDefault(adSlot.Width, adSlot.Height),
+                Image = () => BuildDefaultDefault((int)adSlot.Width, (int)adSlot.Height),
                 MimeType = () => "image/png"
             };
         }

@@ -20,7 +20,7 @@ public class EmailConnector
     
     #region " SendAdSubmitted "
 
-    public async Task SendAdSubmitted(SubmittedAd submitted, string banano)
+    public async Task SendAdSubmitted(SubmittedAd submitted, decimal banano)
     {
         var message = BuildMessage();
         message.To.Add(new MailboxAddress(submitted.SubmitterEmail, submitted.SubmitterEmail));
@@ -28,9 +28,13 @@ public class EmailConnector
 
         var builder = new BodyBuilder
         {
-            TextBody = $@"The attached ad has been submitted for ad slot {submitted.AdSlotId}.
-If accepted, the ad will link to '{submitted.AdLink}' and run for {Hours(submitted.Hours)} at a cost of {banano} BAN.
+            TextBody = banano > 0
+            ? $@"The attached ad has been submitted for ad slot {submitted.AdSlotId}.
+If accepted, the ad will link to '{submitted.AdLink}' and run for {Hours(submitted.Hours)} at a cost of {banano:#,##0.00} BAN.
 You will receive another email with the result of the submission (and an invoice, if accepted)."
+            : $@"The attached ad has been submitted for ad slot {submitted.AdSlotId}.
+If accepted, the ad will link to '{submitted.AdLink}' and run for {Hours(submitted.Hours)}.
+You will receive another email with the result of the submission."
         };
         await using var ad = submitted.Ad();
         await builder.Attachments.AddAsync(submitted.AdFilename, ad);
@@ -53,7 +57,7 @@ You will receive another email with the result of the submission (and an invoice
         {
             HtmlBody = $@"The attached ad has been submitted for ad slot {submitted.AdSlotId}.<br/>
 If accepted, the ad will link to '{submitted.AdLink}' and run for {Hours(submitted.Hours)} at a
-cost of {submitted.Banano} BAN.<br/>
+cost of {submitted.Banano:#,##0} BAN.<br/>
 Please review the ad, then choose an option below:<br/>
 <a href=""mailto:{Config.EmailAddress}?subject={submitted.AdSlotId}_{adId}_APPROVE&body="">ACCEPT</a><br/>
 <a href=""mailto:{Config.EmailAddress}?subject={submitted.AdSlotId}_{adId}_REJECT&body="">REJECT</a><br/>
@@ -98,7 +102,7 @@ Please see the message below for more information:
     
     #region " SendAdApproved "
     
-    public async Task SendAdApproved(string adSlotId, string submitterEmail)
+    public async Task SendAdApproved(string adSlotId, string submitterEmail, string bananoAddress, decimal banano, byte[] qrCode)
     {
         var message = BuildMessage();
         message.To.Add(new MailboxAddress(submitterEmail, submitterEmail));
@@ -106,7 +110,30 @@ Please see the message below for more information:
         
         var builder = new BodyBuilder
         {
-            TextBody = $@""
+            TextBody = $@"Your ad for ad slot {adSlotId} has been approved by the site owner!
+"
+        };
+        message.Body = builder.ToMessageBody();
+
+        await Send(message);
+    }
+    
+    #endregion
+    
+    #region " SendAdApprovedAndQueued "
+
+    public async Task SendAdApprovedAndQueued(string adSlotId, string submitterEmail)
+    {
+        var message = BuildMessage();
+        message.To.Add(new MailboxAddress(submitterEmail, submitterEmail));
+        message.Subject = $"[{Config.SiteId}] Ad approval results";
+        
+        var builder = new BodyBuilder
+        {
+            TextBody = $@"Your ad for ad slot {adSlotId} has been approved by the site owner and your ad has entered the queue!
+You will receive another email when your ad goes live.
+
+Thank you for advertising with {Config.SiteId}!"
         };
         message.Body = builder.ToMessageBody();
 

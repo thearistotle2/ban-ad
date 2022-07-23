@@ -23,7 +23,8 @@ div.container {
 }
 
 div.ad-1,
-div.ad-2 {
+div.ad-2,
+div.ad-3 {
   box-sizing: content-box;
   width: 300px;
   height: 180px;

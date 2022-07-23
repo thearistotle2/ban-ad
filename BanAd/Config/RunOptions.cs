@@ -23,4 +23,7 @@ public class RunOptions
     public string EmailUsername { get; set; }
     public string EmailDisplayName { get; set; }
     public string AdApproverEmail { get; set; }
+    
+    public string BananoPaymentAddress { get; set; }
+    public string BananoNode { get; set; }
 }

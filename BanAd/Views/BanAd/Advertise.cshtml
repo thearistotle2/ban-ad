@@ -19,8 +19,16 @@
 <div class="contact-form-main">
   <div class="intro">
     <p>Looking to advertise?</p>
-    <p>This ad space goes for <strong>@Model.AdSlotInfo.BanPerHour BAN</strong> per hour.</p>
-    <p>Send me your ad and I'll send you an invoice.</p>
+    @if (Model.AdSlotInfo.BanPerHour == 0)
+    {
+      <p>This ad space is <strong>free</strong>, but it still requires approval.</p>
+      <p>Send me your ad and I'll look it over.</p>
+    }
+    else
+    {
+      <p>This ad space goes for <strong>@Model.AdSlotInfo.BanPerHour BAN</strong> per hour.</p>
+      <p>Send me your ad and I'll send you an invoice.</p>
+    }
   </div>
 
   <form id="contact-form" method="post" enctype="multipart/form-data">
@@ -71,7 +79,10 @@
 <div class="hidden result result-success">
   <h3>Your ad has been submitted!</h3>
   <p>Keep an eye on your email to find out if it has been accepted.</p>
-  <p>Once your ad has been accepted, you will receive an invoice that must be paid before your ad will enter the queue.</p>
+  @if (Model.AdSlotInfo.BanPerHour > 1)
+  {
+    <p>Once your ad has been accepted, you will receive an invoice that must be paid before your ad will enter the queue.</p>
+  }
 </div>
 
 <div class="hidden result result-failure">

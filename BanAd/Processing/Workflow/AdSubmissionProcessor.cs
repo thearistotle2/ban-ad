@@ -12,13 +12,23 @@ public class AdSubmissionProcessor
     private AdValidator Validator { get; }
     private FileConnector Files { get; }
     private EmailConnector Email { get; }
+    private BananoConnector Banano { get; }
+    private RunOptions Config { get; }
 
-    public AdSubmissionProcessor(AdSlotsMonitor adSlots, AdValidator validator, FileConnector files, EmailConnector email)
+    public AdSubmissionProcessor(
+        AdSlotsMonitor adSlots,
+        AdValidator validator,
+        FileConnector files,
+        EmailConnector email,
+        BananoConnector banano,
+        RunOptions config)
     {
         AdSlots = adSlots;
         Validator = validator;
         Files = files;
         Email  = email;
+        Banano = banano;
+        Config = config;
     }
 
     internal async Task<AdvertiseResult> ProcessSubmission(AdvertiseInputViewModel model)
@@ -44,8 +54,17 @@ public class AdSubmissionProcessor
 
     internal async Task ProcessApproval(string adSlotId, string adId)
     {
-        var submitterEmail = Files.ApproveAdSubmission(adSlotId, adId);
-        await Email.SendAdApproved(adSlotId, submitterEmail);
+        var (submitterEmail, banano) = Files.ApproveAdSubmission(adSlotId, adId);
+        if (banano == 0)
+        {
+            await Email.SendAdApprovedAndQueued(adSlotId, submitterEmail);
+        }
+        else
+        {
+            var address = AdSlots.Value.Ads[adSlotId].BanAddress ?? Config.BananoPaymentAddress;
+            var qrCode = Banano.BuildQRCode(banano, address);
+            await Email.SendAdApproved(adSlotId, submitterEmail, address, banano, qrCode);
+        }
     }
 
     internal async Task ProcessRejection(string adSlotId, string adId, string? reason)
@@ -63,7 +82,7 @@ public class AdSubmissionProcessor
         {
             AdSlotId = model.Id,
             Hours = hours,
-            Banano = hours * AdSlots.Value.Ads[model.Id].BanPerHour,
+            Banano = hours * (int)AdSlots.Value.Ads[model.Id].BanPerHour,
             SubmitterEmail = model.Email,
             AdLink = model.Link,
             AdFilename = model.Id + Path.GetExtension(model.Ad.FileName),

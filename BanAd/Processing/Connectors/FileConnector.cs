@@ -133,7 +133,7 @@ public class FileConnector
 
     private static object SaveLocker { get; } = new();
 
-    public (string AdId, string Banano) SaveAdSubmission(SubmittedAd submitted)
+    public (string AdId, decimal Banano) SaveAdSubmission(SubmittedAd submitted)
     {
         lock (SaveLocker)
         {
@@ -147,7 +147,7 @@ public class FileConnector
             ad.CopyTo(file);
 
             var parts = id.Split('_');
-            return (parts.First(), parts.Last());
+            return (parts.First(), decimal.Parse(parts.Last()));
         }
     }
 
@@ -162,39 +162,58 @@ public class FileConnector
         var id = int.Parse(
             Max(PendingDirectory(adSlotId)) ?? Max(ApprovedDirectory(adSlotId)) ?? "0000000"
         ) + 1;
-        var pattern = $"*_{banano}.*";
-        var existingAdditionals =
-            Directory.GetDirectories(PendingDirectory(adSlotId), pattern)
-                .Concat(Directory.GetDirectories(ApprovedDirectory(adSlotId), pattern))
-                .Select(dir => dir.Split("_").Last())
-                .Select(ban => (int)(decimal.Parse(ban) * 100) % 100);
-        var additionals = Enumerable.Range(0, 100).Except(existingAdditionals).ToArray();
 
-        if (!additionals.Any())
+        if (banano > 0)
         {
-            throw new Exception(
-                $"Too many ads for ad slot {adSlotId} costing {banano} BAN awaiting approval or payment."
-            );
-        }
+            var pattern = $"*_{banano}.*";
+            var existingAdditionals =
+                Directory.GetDirectories(PendingDirectory(adSlotId), pattern)
+                    .Concat(Directory.GetDirectories(ApprovedDirectory(adSlotId), pattern))
+                    .Select(dir => dir.Split("_").Last())
+                    .Select(ban => (int)(decimal.Parse(ban) * 100) % 100);
+            var additionals = Enumerable.Range(0, 100).Except(existingAdditionals).ToArray();
 
-        var additional = additionals.First();
-        return $"{id:0000000}_{hours}_{banano}.{additional:00}";
+            if (!additionals.Any())
+            {
+                throw new Exception(
+                    $"Too many ads for ad slot {adSlotId} costing {banano} BAN awaiting approval or payment."
+                );
+            }
+
+            var additional = additionals.First();
+            return $"{id:0000000}_{hours}_{banano}.{additional:00}";
+        }
+        else
+        {
+            return $"{id:0000000}_{hours}_{banano}";
+        }
     }
 
     #endregion
 
     #region " ApproveAdSubmission "
 
-    public string ApproveAdSubmission(string adSlotId, string adId)
+    public (string SubmitterEmail, decimal Banano) ApproveAdSubmission(string adSlotId, string adId)
     {
         var directory = Directory.GetDirectories(
             PendingDirectory(adSlotId),
             $"{adId}_*"
         ).Single();
         var submitter = File.ReadAllText(Path.Combine(directory, "submitter"));
-        var approved = Path.Combine(ApprovedDirectory(adSlotId), Path.GetFileName(directory));
-        Directory.Move(directory, approved);
-        return submitter;
+
+        var ban = decimal.Parse(directory.Split('_').Last());
+        if (ban == 0)
+        {
+            var paid = Path.Combine(PaidDirectory(adSlotId), Path.GetFileName(directory));
+            Directory.Move(directory, paid);
+        }
+        else
+        {
+            var approved = Path.Combine(ApprovedDirectory(adSlotId), Path.GetFileName(directory));
+            Directory.Move(directory, approved);
+        }
+
+        return (submitter, ban);
     }
 
     #endregion
