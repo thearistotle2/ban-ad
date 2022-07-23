@@ -28,3 +28,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+// Shut down monitors gracefully before exiting the process.
+Dependencies.StopMonitors();

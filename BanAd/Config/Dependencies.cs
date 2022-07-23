@@ -1,11 +1,35 @@
 using BanAd.Ads;
 using BanAd.Processing.Connectors;
+using BanAd.Processing.Monitoring;
 using BanAd.Processing.Workflow;
+using Monitor = BanAd.Processing.Monitoring.Monitor;
 
 namespace BanAd.Config;
 
 public static class Dependencies
 {
+    
+    #region " Monitors "
+    
+    private static IEnumerable<Monitor> Monitors { get; set; }
+
+    public static void StopMonitors()
+    {
+        Console.WriteLine("Stopping monitors; please wait.");
+        var complete = Monitors.Select(monitor => monitor.Stop()).ToArray();
+        while (complete.Any(mres => !mres.IsSet))
+        {
+            var first = complete.FirstOrDefault(mres => !mres.IsSet);
+            if (first != null)
+            {
+                first.Wait();
+            }
+        }
+        Console.WriteLine("Monitors stopped.");
+    }
+    
+    #endregion
+
     public static void AddDependencies(IServiceCollection services)
     {
         var env = GetEnvironmentVariables();
@@ -45,6 +69,8 @@ public static class Dependencies
                 BotMinSeconds = minSeconds,
                 SmtpServer = env["SMTP_SERVER"],
                 SmtpPort = int.Parse(env["SMTP_PORT"]),
+                ImapServer = env["IMAP_SERVER"],
+                ImapPort = int.Parse(env["IMAP_PORT"]),
                 EmailAddress = env["EMAIL_ADDRESS"],
                 EmailPassword = password,
                 EmailUsername = username,
@@ -59,6 +85,31 @@ public static class Dependencies
         services.AddSingleton<AdSubmissionProcessor>();
         services.AddSingleton<EmailConnector>();
         services.AddSingleton<FileConnector>();
+        
+        // Monitors.
+        services.AddSingleton(provider =>
+            new AdChangeMonitor(
+                provider.GetRequiredService<AdSubmissionProcessor>(),
+                TimeSpan.FromSeconds(30)));
+        
+        services.AddSingleton(provider =>
+            new EmailMonitor(
+                provider.GetRequiredService<AdSubmissionProcessor>(),
+                TimeSpan.FromSeconds(30),
+                provider.GetRequiredService<EmailConnector>()));
+        
+        services.AddSingleton(provider =>
+            new PaymentMonitor(
+                provider.GetRequiredService<AdSubmissionProcessor>(),
+                TimeSpan.FromSeconds(30)));
+
+        var provider = services.BuildServiceProvider();
+        Monitors = new Monitor[]
+        {
+            provider.GetRequiredService<AdChangeMonitor>(),
+            provider.GetRequiredService<EmailMonitor>(),
+            provider.GetRequiredService<PaymentMonitor>()
+        };
     }
     
     private static IDictionary<string, string> GetEnvironmentVariables()

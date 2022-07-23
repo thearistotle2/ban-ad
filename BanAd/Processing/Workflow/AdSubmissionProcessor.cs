@@ -21,7 +21,7 @@ public class AdSubmissionProcessor
         Email  = email;
     }
 
-    public async Task<AdvertiseResult> ProcessSubmission(AdvertiseInputViewModel model)
+    internal async Task<AdvertiseResult> ProcessSubmission(AdvertiseInputViewModel model)
     {
         var validation = await Validator.Validate(model);
         if (!validation.Valid)
@@ -40,6 +40,18 @@ public class AdSubmissionProcessor
         await Task.WhenAll(submitter, approver);
 
         return new AdvertiseResult { Success = true };
+    }
+
+    internal async Task ProcessApproval(string adSlotId, string adId)
+    {
+        var submitterEmail = Files.ApproveAdSubmission(adSlotId, adId);
+        await Email.SendAdApproved(adSlotId, submitterEmail);
+    }
+
+    internal async Task ProcessRejection(string adSlotId, string adId, string? reason)
+    {
+        var submitterEmail = Files.DeleteAdSubmission(adSlotId, adId);
+        await Email.SendAdRejected(adSlotId, submitterEmail, reason);
     }
     
     #region " Map "

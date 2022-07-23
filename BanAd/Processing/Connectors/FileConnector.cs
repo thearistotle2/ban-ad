@@ -68,7 +68,7 @@ public class FileConnector
                     var expires = DateTime.Parse(Path.GetFileNameWithoutExtension(file));
                     if (expires < DateTime.UtcNow)
                     {
-                        Directory.Delete(CurrentDirectory(adSlotId));
+                        Directory.Delete(CurrentDirectory(adSlotId), true);
                         file = null;
                     }
                 }
@@ -95,7 +95,7 @@ public class FileConnector
                         File.Move(
                             Path.Combine(next, "link"),
                             Path.Combine(directory, "link"));
-                        Directory.Delete(next);
+                        Directory.Delete(next, true);
                         live[adSlotId] = submitter;
                     }
                 }
@@ -162,14 +162,22 @@ public class FileConnector
         var id = int.Parse(
             Max(PendingDirectory(adSlotId)) ?? Max(ApprovedDirectory(adSlotId)) ?? "0000000"
         ) + 1;
-        var existingAdditionals = Directory.GetDirectories(
-                PendingDirectory(adSlotId),
-                $"*_{banano}.*")
-            .Select(dir => dir.Split("_").Last())
-            .Select(ban => (int)(decimal.Parse(ban) * 100) % 100);
+        var pattern = $"*_{banano}.*";
+        var existingAdditionals =
+            Directory.GetDirectories(PendingDirectory(adSlotId), pattern)
+                .Concat(Directory.GetDirectories(ApprovedDirectory(adSlotId), pattern))
+                .Select(dir => dir.Split("_").Last())
+                .Select(ban => (int)(decimal.Parse(ban) * 100) % 100);
         var additionals = Enumerable.Range(0, 100).Except(existingAdditionals).ToArray();
-        var additional = additionals.First();
 
+        if (!additionals.Any())
+        {
+            throw new Exception(
+                $"Too many ads for ad slot {adSlotId} costing {banano} BAN awaiting approval or payment."
+            );
+        }
+
+        var additional = additionals.First();
         return $"{id:0000000}_{hours}_{banano}.{additional:00}";
     }
 
@@ -200,7 +208,7 @@ public class FileConnector
             $"{adId}_*"
         ).Single();
         var submitter = File.ReadAllText(Path.Combine(directory, "submitter"));
-        Directory.Delete(directory);
+        Directory.Delete(directory, true);
         return submitter;
     }
 
