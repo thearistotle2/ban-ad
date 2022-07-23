@@ -131,7 +131,11 @@ public class BanAdController : Controller
             || !TimeTracker.ContainsKey(Request.HttpContext.Connection.Id)
             // Submitted the page too quickly.
             || TimeTracker[Request.HttpContext.Connection.Id] > DateTime.UtcNow.AddSeconds(-Config.BotMinSeconds);
-        Console.WriteLine($"Connection Id {Request.HttpContext.Connection.Id} determined to be a bot.");
+        if (bot)
+        {
+            Console.WriteLine($"Connection Id {Request.HttpContext.Connection.Id} determined to be a bot.");
+        }
+
         return bot;
     }
 

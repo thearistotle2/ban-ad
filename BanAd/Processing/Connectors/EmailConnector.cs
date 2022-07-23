@@ -102,7 +102,7 @@ Please see the message below for more information:
     
     #region " SendAdApproved "
     
-    public async Task SendAdApproved(string adSlotId, string submitterEmail, string bananoAddress, decimal banano, byte[] qrCode)
+    public async Task SendAdApproved(string adSlotId, string submitterEmail, string bananoAddress, decimal banano, byte[] qrCode, string qrCodeLink)
     {
         var message = BuildMessage();
         message.To.Add(new MailboxAddress(submitterEmail, submitterEmail));
@@ -110,9 +110,13 @@ Please see the message below for more information:
         
         var builder = new BodyBuilder
         {
-            TextBody = $@"Your ad for ad slot {adSlotId} has been approved by the site owner!
-"
+            HtmlBody = $@"Your ad for ad slot {adSlotId} has been approved by the site owner!<br /><br />
+Please send <strong>exactly</strong> {banano} BAN to {bananoAddress}:<br />
+<a href=""{qrCodeLink}""><img src=""cid:qrcode"" /></a><br />
+<small>(Click to open in Kalium.)</small><br /><br />
+You will receive another email once payment has been received and your ad has entered the queue."
         };
+        builder.LinkedResources.Add($"qrcode.png", qrCode).ContentId = "qrcode";
         message.Body = builder.ToMessageBody();
 
         await Send(message);

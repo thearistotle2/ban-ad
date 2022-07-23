@@ -62,8 +62,8 @@ public class AdSubmissionProcessor
         else
         {
             var address = AdSlots.Value.Ads[adSlotId].BanAddress ?? Config.BananoPaymentAddress;
-            var qrCode = Banano.BuildQRCode(banano, address);
-            await Email.SendAdApproved(adSlotId, submitterEmail, address, banano, qrCode);
+            var qr = Banano.BuildQRCode(banano, address);
+            await Email.SendAdApproved(adSlotId, submitterEmail, address, banano, qr.QRCode, qr.QRCodeContent);
         }
     }
 

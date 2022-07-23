@@ -22,7 +22,7 @@ public class BananoConnector
     
     #region " QR Code "
 
-    public byte[] BuildQRCode(decimal banano, string address)
+    public (byte[] QRCode, string QRCodeContent) BuildQRCode(decimal banano, string address)
     {
         var remainder = banano - decimal.Floor(banano);
         var rawRemainder = remainder == 0
@@ -30,7 +30,7 @@ public class BananoConnector
             : remainder.ToString()[2..].PadRight(29, '0');
         var raw = $"{decimal.Floor(banano)}{rawRemainder}";
         var value = $"banano:{address}?amount={raw}";
-        return GenerateQRCode(value);
+        return (GenerateQRCode(value), value);
     }
     
     private byte[] GenerateQRCode(string content)
