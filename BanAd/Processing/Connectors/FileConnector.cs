@@ -161,7 +161,7 @@ public class FileConnector
             File.WriteAllText(Path.Combine(directory, "submitter"), submitted.SubmitterEmail);
             File.WriteAllText(Path.Combine(directory, "link"), submitted.AdLink);
             using var ad = submitted.Ad();
-            using var file = System.IO.File.Create(Path.Combine(directory, submitted.AdFilename)); // TODO
+            using var file = File.Create(Path.Combine(directory, submitted.AdFilename));
             ad.CopyTo(file);
 
             var parts = id.Split('_');

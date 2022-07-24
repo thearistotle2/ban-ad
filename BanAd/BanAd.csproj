@@ -14,7 +14,7 @@
       <PackageReference Include="SkiaSharp" Version="2.88.0" />
       <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.0" />
       <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
-      <PackageReference Include="SLSAK" Version="0.1.0" />
+      <PackageReference Include="SLSAK" Version="0.1.1" />
     </ItemGroup>
 
     <ItemGroup>
