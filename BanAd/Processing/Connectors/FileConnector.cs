@@ -88,6 +88,7 @@ public class FileConnector
                     if (next != null)
                     {
                         var hours = int.Parse(Path.GetFileName(next).Split('_').Last());
+                        Console.WriteLine($"{DateTime.UtcNow}: Serving new ad for {hours} hours.");
 
                         var submitter = File.ReadAllText(Path.Combine(next, "submitter"));
                         var ad = Directory
