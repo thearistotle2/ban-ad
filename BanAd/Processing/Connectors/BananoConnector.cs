@@ -121,7 +121,10 @@ public class BananoConnector
     private decimal FromRaw(string raw)
     {
         var length = raw.Length;
-        return decimal.Parse($"{raw[..(length - 29)]}.{raw[(length - 29)..]}");
+        // If the transaction is less than 1 BAN, it's not a payment for this system.
+        return length < 30
+            ? 0
+            : decimal.Parse($"{raw[..(length - 29)]}.{raw[(length - 29)..]}");
     }
 
     #region " Seen Tracking "
