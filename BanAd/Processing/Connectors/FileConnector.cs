@@ -75,6 +75,7 @@ public class FileConnector
                         DateTimeStyles.RoundtripKind);
                     if (expires < DateTime.UtcNow)
                     {
+                        Console.WriteLine($"{DateTime.UtcNow}: Deleting file {file} because {expires} has already past."); // TODO
                         Directory.Delete(CurrentDirectory(adSlotId), true);
                         file = null;
                     }
