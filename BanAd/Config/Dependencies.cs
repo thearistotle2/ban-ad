@@ -63,6 +63,8 @@ public static class Dependencies
                 SiteBaseUrl = env["SITE_BASE_URL"].TrimEnd('/'),
                 AdSlotDeclarations = env["AD_SLOT_DECLARATIONS"],
                 AdsLocation = env["ADS_LOCATION"],
+                BananoTrackingLocation = env["BANANO_TRACKING_LOCATION"],
+                BananoHistoryCount = int.Parse(env["BANANO_HISTORY_COUNT"]),
                 SupportedExtensions = extensions,
                 MaxUploadSizeKiB = maxSize,
                 BotHoneypotName = env["BOT_HONEYPOT_NAME"],
@@ -93,18 +95,29 @@ public static class Dependencies
         services.AddSingleton(provider =>
             new AdChangeMonitor(
                 provider.GetRequiredService<AdSubmissionProcessor>(),
-                TimeSpan.FromSeconds(30)));
+                TimeSpan.FromSeconds(30),
+                provider.GetRequiredService<FileConnector>()
+            )
+        );
         
         services.AddSingleton(provider =>
             new EmailMonitor(
                 provider.GetRequiredService<AdSubmissionProcessor>(),
                 TimeSpan.FromSeconds(30),
-                provider.GetRequiredService<EmailConnector>()));
+                provider.GetRequiredService<EmailConnector>()
+            )
+        );
         
         services.AddSingleton(provider =>
             new PaymentMonitor(
                 provider.GetRequiredService<AdSubmissionProcessor>(),
-                TimeSpan.FromSeconds(30)));
+                TimeSpan.FromSeconds(30),
+                provider.GetRequiredService<AdSlotsMonitor>(),
+                provider.GetRequiredService<FileConnector>(),
+                provider.GetRequiredService<BananoConnector>(),
+                provider.GetRequiredService<RunOptions>()
+            )
+        );
 
         var provider = services.BuildServiceProvider();
         Monitors = new Monitor[]

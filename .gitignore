@@ -352,3 +352,4 @@ MigrationBackup/
 # App-specific ignores
 ad-slots/
 ads/
+banano-tracking/

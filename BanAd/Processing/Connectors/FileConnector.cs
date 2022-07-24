@@ -1,3 +1,4 @@
+using System.Globalization;
 using BanAd.Config;
 using BanAd.Processing.Entities;
 using File = SLSAK.Docker.IO.File;
@@ -37,7 +38,9 @@ public class FileConnector
     public (string? Filename, string? Link) CurrentAd(string adSlotId)
     {
         var directory = CurrentDirectory(adSlotId);
-        var filename = Directory.GetFiles(directory, "*.*").FirstOrDefault();
+        var filename = Directory
+            .GetFiles(directory) // *.* will match extensionless files as well, so just skip it and do the below.
+            .FirstOrDefault(filename => filename[1..].Contains("."));
         if (filename != null)
         {
             var link = File.ReadAllText(Path.Combine(directory, "link"));
@@ -65,7 +68,11 @@ public class FileConnector
                 var (file, _) = CurrentAd(adSlotId);
                 if (file != null)
                 {
-                    var expires = DateTime.Parse(Path.GetFileNameWithoutExtension(file));
+                    var expires = DateTime.Parse(
+                        Path.GetFileNameWithoutExtension(file),
+                        null,
+                        // Respect the Z, because the comparison below doesn't work Local to UTC.
+                        DateTimeStyles.RoundtripKind);
                     if (expires < DateTime.UtcNow)
                     {
                         Directory.Delete(CurrentDirectory(adSlotId), true);
@@ -82,7 +89,10 @@ public class FileConnector
                         var hours = int.Parse(Path.GetFileName(next).Split('_').Last());
 
                         var submitter = File.ReadAllText(Path.Combine(next, "submitter"));
-                        var ad = Directory.GetFiles(next, "*.*").Single();
+                        var ad = Directory
+                            .GetFiles(
+                                next) // *.* will match extensionless files as well, so just skip it and do the below.
+                            .Single(filename => filename[1..].Contains("."));
                         var extension = Path.GetExtension(ad);
 
                         var directory = CurrentDirectory(adSlotId);
@@ -109,9 +119,9 @@ public class FileConnector
 
     #region " AdsPendingPayment "
 
-    public IEnumerable<(string AdSlotId, string AdId, decimal Banano, string SubmitterEmail)> AdsPendingPayment()
+    public IEnumerable<PendingPayment> AdsPendingPayment()
     {
-        var pending = new List<(string, string, decimal, string)>();
+        var pending = new List<PendingPayment>();
 
         foreach (var adSlotId in AdSlots.Value.Ads.Keys)
         {
@@ -120,7 +130,15 @@ public class FileConnector
             {
                 var parts = Path.GetFileName(directory).Split('_');
                 var submitter = File.ReadAllText(Path.Combine(directory, "submitter"));
-                pending.Add((adSlotId, parts.First(), decimal.Parse(parts.Last()), submitter));
+                pending.Add(
+                    new PendingPayment
+                    {
+                        AdSlotId = adSlotId,
+                        AdId = parts.First(),
+                        Banano = decimal.Parse(parts.Last()),
+                        SubmitterEmail = submitter
+                    }
+                );
             }
         }
 
@@ -242,7 +260,8 @@ public class FileConnector
             $"{adId}_*"
         ).Single();
         var submitter = File.ReadAllText(Path.Combine(directory, "submitter"));
-        var paid = directory[0..directory.LastIndexOf('_')];
+        var target = Path.GetFileName(directory);
+        var paid = Path.Combine(PaidDirectory(adSlotId), target[..target.LastIndexOf('_')]);
         Directory.Move(directory, paid);
         return submitter;
     }

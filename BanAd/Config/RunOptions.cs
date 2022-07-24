@@ -7,6 +7,8 @@ public class RunOptions
     
     public string AdSlotDeclarations { get; set; }
     public string AdsLocation { get; set; }
+    public string BananoTrackingLocation { get; set; }
+    public int BananoHistoryCount { get; set; }
 
     public IEnumerable<string> SupportedExtensions { get; set; }
     public int MaxUploadSizeKiB { get; set; }

@@ -72,6 +72,17 @@ public class AdSubmissionProcessor
         var submitterEmail = Files.DeleteAdSubmission(adSlotId, adId);
         await Email.SendAdRejected(adSlotId, submitterEmail, reason);
     }
+
+    internal async Task ProcessPayment(string adSlotId, string adId, string submitterEmail)
+    {
+        Files.PayAdSubmission(adSlotId, adId);
+        await Email.SendAdPaid(adSlotId, submitterEmail);
+    }
+
+    internal async Task ProcessLive(string adSlotId, string submitterEmail)
+    {
+        await Email.SendAdLive(adSlotId, submitterEmail);
+    }
     
     #region " Map "
 
