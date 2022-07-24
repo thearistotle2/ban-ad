@@ -122,21 +122,40 @@ public class BanAdController : Controller
 
     private bool IsLikelyBot()
     {
-        var bot =
-            // Did not submit the honeypot.
-            !Request.Form.TryGetValue(Config.BotHoneypotName, out StringValues honeypot)
-            // Submitted a valued honeypot.
-            || !string.IsNullOrWhiteSpace(honeypot)
-            // Did not start on the page.
-            || !TimeTracker.ContainsKey(Request.HttpContext.Connection.Id)
-            // Submitted the page too quickly.
-            || TimeTracker[Request.HttpContext.Connection.Id] > DateTime.UtcNow.AddSeconds(-Config.BotMinSeconds);
-        if (bot)
+        // Did not submit the honeypot.
+        if (!Request.Form.TryGetValue(Config.BotHoneypotName, out StringValues honeypot))
         {
-            Console.WriteLine($"Connection Id {Request.HttpContext.Connection.Id} determined to be a bot.");
+            Console.WriteLine($@"Connection Id {Request.HttpContext.Connection.Id} determined to be a bot:
+Honeypot field '{Config.BotHoneypotName}' not submitted.");
+            return true;
         }
 
-        return bot;
+        // Submitted a valued honeypot.
+        if (!string.IsNullOrWhiteSpace(honeypot))
+        {   
+            Console.WriteLine($@"Connection Id {Request.HttpContext.Connection.Id} determined to be a bot:
+Honeypot field '{Config.BotHoneypotName}' submitted with value ('{honeypot}').");
+            return true;
+        }
+        
+        // Did not start on the page.
+        if (!TimeTracker.ContainsKey(Request.HttpContext.Connection.Id))
+        {
+            Console.WriteLine($@"Connection Id {Request.HttpContext.Connection.Id} determined to be a bot:
+Connection Id not in time tracker, so the request did not start on this page.");
+            return true;
+        }
+        
+        // Submitted the page too quickly.
+        var timespan = DateTime.UtcNow - TimeTracker[Request.HttpContext.Connection.Id]; 
+        if (timespan < TimeSpan.FromSeconds(Config.BotMinSeconds))
+        {
+            Console.WriteLine($@"Connection Id {Request.HttpContext.Connection.Id} determined to be a bot:
+Page submitted after {timespan}, which is quicker than the required {Config.BotMinSeconds} seconds.");
+            return true;
+        }
+        
+        return false;
     }
 
     #endregion
