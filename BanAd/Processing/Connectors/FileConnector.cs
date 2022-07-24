@@ -75,7 +75,6 @@ public class FileConnector
                         DateTimeStyles.RoundtripKind);
                     if (expires < DateTime.UtcNow)
                     {
-                        Console.WriteLine($"{DateTime.UtcNow}: Deleting file {file} because {expires} has already past."); // TODO
                         Directory.Delete(CurrentDirectory(adSlotId), true);
                         file = null;
                     }
@@ -88,7 +87,6 @@ public class FileConnector
                     if (next != null)
                     {
                         var hours = int.Parse(Path.GetFileName(next).Split('_').Last());
-                        Console.WriteLine($"{DateTime.UtcNow}: Serving new ad for {hours} hours.");
 
                         var submitter = File.ReadAllText(Path.Combine(next, "submitter"));
                         var ad = Directory
@@ -224,7 +222,8 @@ public class FileConnector
         var ban = decimal.Parse(directory.Split('_').Last());
         if (ban == 0)
         {
-            var paid = Path.Combine(PaidDirectory(adSlotId), Path.GetFileName(directory));
+            var target = Path.GetFileName(directory);
+            var paid = Path.Combine(PaidDirectory(adSlotId), target[..target.LastIndexOf('_')]);
             Directory.Move(directory, paid);
         }
         else
