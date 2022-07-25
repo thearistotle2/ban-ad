@@ -1,11 +1,15 @@
 ﻿using System.Collections.Concurrent;
+using System.Text;
 using BanAd.Ads;
 using BanAd.Config;
+using BanAd.Processing.Connectors;
+using BanAd.Processing.Entities;
 using BanAd.Processing.Workflow;
 using BanAd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
+using SkiaSharp;
 
 namespace BanAd.Controllers;
 
@@ -15,6 +19,7 @@ public class BanAdController : Controller
     private AdBuilder AdBuilder { get; }
     private AdSubmissionProcessor Processor { get; }
     private AdSlotsMonitor AdSlots { get; }
+    private FileConnector Files { get; }
     private RunOptions Config { get; }
     private static ConcurrentDictionary<string, DateTime> TimeTracker { get; } = new();
 
@@ -22,11 +27,13 @@ public class BanAdController : Controller
         AdBuilder adBuilder,
         AdSubmissionProcessor processor,
         AdSlotsMonitor adSlots,
+        FileConnector files,
         RunOptions config)
     {
         AdBuilder = adBuilder;
         Processor = processor;
         AdSlots = adSlots;
+        Files = files;
         Config = config;
     }
 
@@ -37,7 +44,7 @@ public class BanAdController : Controller
         var id = $"{Guid.NewGuid().GetHashCode():X}";
         return Content(id);
     }
-    
+
     public IActionResult Upcoming(string id)
     {
         throw new NotImplementedException();
@@ -67,7 +74,7 @@ public class BanAdController : Controller
     {
         if (!AdSlots.Value.Ads.ContainsKey(id))
         {
-            return Content(string.Empty);
+            return NotFound();
         }
 
         TimeTracker[Request.HttpContext.Connection.Id] = DateTime.UtcNow;
@@ -82,7 +89,8 @@ public class BanAdController : Controller
             SupportedExtensions = Config.SupportedExtensions,
             MaxSizeKiB = Config.MaxUploadSizeKiB,
             MaxSizeDisplay = mb.Remainder == 0 ? $"{mb.Quotient}mb" : $"{Config.MaxUploadSizeKiB}kb",
-            HoneypotName = Config.BotHoneypotName
+            HoneypotName = Config.BotHoneypotName,
+            FutureAdHours = FutureAdHours(Files.FutureHours(id))
         });
     }
 
@@ -132,12 +140,12 @@ Honeypot field '{Config.BotHoneypotName}' not submitted.");
 
         // Submitted a valued honeypot.
         if (!string.IsNullOrWhiteSpace(honeypot))
-        {   
+        {
             Console.WriteLine($@"Connection Id {Request.HttpContext.Connection.Id} determined to be a bot:
 Honeypot field '{Config.BotHoneypotName}' submitted with value ('{honeypot}').");
             return true;
         }
-        
+
         // Did not start on the page.
         if (!TimeTracker.ContainsKey(Request.HttpContext.Connection.Id))
         {
@@ -145,17 +153,59 @@ Honeypot field '{Config.BotHoneypotName}' submitted with value ('{honeypot}').")
 Connection Id not in time tracker, so the request did not start on this page.");
             return true;
         }
-        
+
         // Submitted the page too quickly.
-        var timespan = DateTime.UtcNow - TimeTracker[Request.HttpContext.Connection.Id]; 
+        var timespan = DateTime.UtcNow - TimeTracker[Request.HttpContext.Connection.Id];
         if (timespan < TimeSpan.FromSeconds(Config.BotMinSeconds))
         {
             Console.WriteLine($@"Connection Id {Request.HttpContext.Connection.Id} determined to be a bot:
 Page submitted after {timespan}, which is quicker than the required {Config.BotMinSeconds} seconds.");
             return true;
         }
-        
+
         return false;
+    }
+
+    private string? FutureAdHours(FutureHours hours)
+    {
+        if (hours.Paid > 0 || hours.Approved > 0 || hours.Pending > 0)
+        {
+            if (hours.Paid > 0 && hours.Approved > 0 && hours.Pending > 0)
+            {
+                return $@"This ad slot currently has {hours.Paid} hours queued,
+{hours.Approved} hours awaiting payment, and {hours.Pending} hours awaiting approval.";
+            }
+
+            var sb = new StringBuilder();
+            if (hours.Paid > 0)
+            {
+                sb.Append($"{hours.Paid} hours queued");
+            }
+
+            if (hours.Approved > 0)
+            {
+                if (sb.Length > 0)
+                {
+                    sb.Append(" and ");
+                }
+
+                sb.Append($"{hours.Approved} hours awaiting payment");
+            }
+
+            if (hours.Pending > 0)
+            {
+                if (sb.Length > 0)
+                {
+                    sb.Append(" and ");
+                }
+
+                sb.Append($"{hours.Pending} hours awaiting approval");
+            }
+
+            return $"This ad slot currently has {sb}.";
+        }
+
+        return null;
     }
 
     #endregion

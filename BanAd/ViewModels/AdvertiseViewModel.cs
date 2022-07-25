@@ -1,4 +1,5 @@
 using BanAd.Config;
+using BanAd.Processing.Entities;
 
 namespace BanAd.ViewModels;
 
@@ -11,4 +12,5 @@ public class AdvertiseViewModel
     public int MaxSizeKiB { get; set; }
     public string MaxSizeDisplay { get; set; }
     public string HoneypotName { get; set; }
+    public string? FutureAdHours { get; set; }
 }

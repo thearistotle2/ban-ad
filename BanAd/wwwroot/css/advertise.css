@@ -208,3 +208,8 @@ body.contact-form-body {
   margin-top: 80px;
   margin-bottom: 80px;
 }
+
+.contact-form-body .future-hours {
+  font-size: 0.6em;
+  font-style: italic;
+}

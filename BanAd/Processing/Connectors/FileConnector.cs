@@ -52,12 +52,42 @@ public class FileConnector
 
     #endregion
     
-    #region " FutureAds "
+    #region " FutureHours "
 
-    public void FutureAds(string adSlotId)
+    public FutureHours FutureHours(string adSlotId)
     {
-        var pending = Directory.GetDirectories(PendingDirectory(adSlotId));
-        var approved = Directory.GetDirectories(ApprovedDirectory(adSlotId));
+        int Sum(string directory) =>
+            Directory.GetDirectories(directory)
+                .Select(Path.GetFileName)
+                .Sum(dir => int.Parse(dir.Split('_').Skip(1).First()));
+
+        var hours = new FutureHours()
+        {
+            Paid = Sum(PaidDirectory(adSlotId)),
+            Approved = Sum(ApprovedDirectory(adSlotId)),
+            Pending = Sum(PendingDirectory(adSlotId))
+        };
+        
+        var (current, _) = CurrentAd(adSlotId);
+        if (current != null)
+        {
+            var expires = DateTime.Parse(
+                Path.GetFileNameWithoutExtension(current),
+                null,
+                // Respect the Z, because the calculation below doesn't work Local to UTC.
+                DateTimeStyles.RoundtripKind);
+            hours.Paid += (int)Math.Round((expires - DateTime.UtcNow).TotalHours);
+        }
+
+        return hours;
+    }
+    
+    #endregion
+    
+    #region " QueuedAds "
+
+    public void QueuedAds(string adSlotId)
+    {
         var paid = Directory.GetDirectories(PaidDirectory(adSlotId));
     }
     
