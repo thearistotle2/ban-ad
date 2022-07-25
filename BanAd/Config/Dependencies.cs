@@ -57,6 +57,10 @@ public static class Dependencies
                 ? env["EMAIL_DISPLAY_NAME"]
                 : env["EMAIL_ADDRESS"];
 
+            string? node = env.ContainsKey("BANANO_NODE")
+                ? env["BANANO_NODE"]
+                : null;
+
             return new RunOptions
             {
                 SiteId = env["SITE_ID"],
@@ -79,7 +83,10 @@ public static class Dependencies
                 EmailDisplayName = displayName,
                 AdApproverEmail = env["AD_APPROVER_EMAIL"],
                 BananoPaymentAddress = env["BANANO_PAYMENT_ADDRESS"],
-                BananoNode = env["BANANO_NODE"]
+                BananoWatchType = Enum.Parse<BananoWatchType>(env["BANANO_WATCH_TYPE"], true),
+                CreeperHistoryUrl = env["BANANO_CREEPER_HISTORY_URL"],
+                CreeperReceivableUrl = env["BANANO_CREEPER_RECEIVABLE_URL"],
+                BananoNode = node
             };
         });
 
@@ -87,9 +94,18 @@ public static class Dependencies
         services.AddSingleton<AdBuilder>();
         services.AddSingleton<AdValidator>();
         services.AddSingleton<AdSubmissionProcessor>();
-        services.AddSingleton<BananoConnector>();
         services.AddSingleton<EmailConnector>();
         services.AddSingleton<FileConnector>();
+
+        services.AddSingleton<BananoRpcConnector>();
+        services.AddSingleton<BananoCreeperConnector>();
+        services.AddSingleton<BananoConnector>(provider =>
+            provider.GetRequiredService<RunOptions>().BananoWatchType switch
+            {
+                BananoWatchType.Rpc => provider.GetRequiredService<BananoRpcConnector>(),
+                BananoWatchType.Creeper => provider.GetRequiredService<BananoCreeperConnector>(),
+                _ => throw new ArgumentOutOfRangeException(nameof(BananoWatchType))
+            });
         
         // Monitors.
         services.AddSingleton(provider =>

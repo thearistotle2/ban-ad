@@ -27,5 +27,8 @@ public class RunOptions
     public string AdApproverEmail { get; set; }
     
     public string BananoPaymentAddress { get; set; }
-    public string BananoNode { get; set; }
+    public BananoWatchType BananoWatchType { get; set; }
+    public string CreeperHistoryUrl { get; set; }
+    public string CreeperReceivableUrl { get; set; }
+    public string? BananoNode { get; set; }
 }
