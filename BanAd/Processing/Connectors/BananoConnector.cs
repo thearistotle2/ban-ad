@@ -1,6 +1,5 @@
 using System.Text.Json;
 using BanAd.Config;
-using Newtonsoft.Json.Linq;
 using SkiaSharp;
 using SkiaSharp.QrCode.Image;
 using SLSAK.Extensions;
@@ -29,7 +28,10 @@ public abstract class BananoConnector
             .Select(Path.GetFileName)
             .ToDictionary(
                 address => address,
-                address => Directory.GetFiles(Path.Combine(Config.BananoTrackingLocation, address)).ToList()
+                address =>
+                    Directory.GetFiles(Path.Combine(Config.BananoTrackingLocation, address))
+                    .Select(Path.GetFileName)
+                    .ToList()
             );
     }
 
@@ -77,7 +79,7 @@ public abstract class BananoConnector
 
     protected decimal FromRaw(string raw)
     {
-        var length = raw.Length;
+        var length = raw?.Length ?? 0;
         // If the transaction is less than 1 BAN, it's not a payment for this system.
         return length < 30
             ? 0
@@ -187,7 +189,7 @@ internal class BananoRpcConnector : BananoConnector
 
         public class HistoryPayment
         {
-            public string Amount { get; set; }
+            public string? Amount { get; set; } // string? because some block types don't contain amount.
             public string Hash { get; set; }
         }
     }
@@ -201,13 +203,50 @@ internal class BananoCreeperConnector : BananoConnector
     {
     }
 
-    protected override Task<Dictionary<string, decimal>> GetNewPaymentsReceivable(string address)
+    protected override async Task<Dictionary<string, decimal>> GetNewPaymentsReceivable(string address)
     {
-        throw new NotImplementedException();
+        var request = new
+        {
+            address,
+            size = Config.BananoHistoryCount
+        };
+        return await Process(Client.PostAsJsonAsync(Config.CreeperReceivableUrl, request));
     }
 
-    protected override Task<Dictionary<string, decimal>> GetNewPaymentsHistory(string address)
+    protected override async Task<Dictionary<string, decimal>> GetNewPaymentsHistory(string address)
     {
-        throw new NotImplementedException();
+        var request = new
+        {
+            address,
+            size = Config.BananoHistoryCount
+        };
+        return await Process( Client.PostAsJsonAsync(Config.CreeperHistoryUrl, request));
     }
+
+    private async Task<Dictionary<string, decimal>> Process(Task<HttpResponseMessage> request)
+    {
+        var response = await request;
+        response.EnsureSuccessStatusCode();
+        var payments = (await response.Content.ReadFromJsonAsync<Block[]>());
+
+        if (payments?.Any() == true)
+        {
+            return payments.ToDictionary(
+                payment => payment.Hash,
+                payment => payment.Amount ?? 0
+            );
+        }
+
+        return new Dictionary<string, decimal>();
+    }
+
+    #region " Response Objects "
+
+    private class Block
+    {
+        public string Hash { get; set; }
+        public decimal? Amount { get; set; }
+    }
+
+    #endregion
 }

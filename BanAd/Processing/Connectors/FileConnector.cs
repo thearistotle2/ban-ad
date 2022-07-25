@@ -51,6 +51,17 @@ public class FileConnector
     }
 
     #endregion
+    
+    #region " FutureAds "
+
+    public void FutureAds(string adSlotId)
+    {
+        var pending = Directory.GetDirectories(PendingDirectory(adSlotId));
+        var approved = Directory.GetDirectories(ApprovedDirectory(adSlotId));
+        var paid = Directory.GetDirectories(PaidDirectory(adSlotId));
+    }
+    
+    #endregion
 
     #region " ProgressAdsIfNeeded "
 
@@ -178,7 +189,7 @@ public class FileConnector
                 .Max();
 
         var id = int.Parse(
-            Max(PendingDirectory(adSlotId)) ?? Max(ApprovedDirectory(adSlotId)) ?? "0000000"
+            Max(PendingDirectory(adSlotId)) ?? Max(ApprovedDirectory(adSlotId)) ?? Max(PaidDirectory(adSlotId)) ?? "0000000"
         ) + 1;
 
         if (banano > 0)
