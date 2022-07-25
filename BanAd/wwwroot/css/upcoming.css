@@ -1,0 +1,83 @@
+/*
+  https://cssminifier.org/
+*/
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Contact Form Body */
+
+body.upcoming-ads-body {
+  font-family: 'Lato', georgia;
+  font-size: 25px;
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(236, 181, 62, 0.95);
+  text-align: center;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+.upcoming-ads-body .current-ad {
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+
+.upcoming-ads-body .current-ad-link,
+.upcoming-ads-body .current-ad-expires {
+  font-size: 0.8em;
+  margin-top: -5px;
+  margin-bottom: 5px;
+}
+
+.upcoming-ads-body table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.upcoming-ads-body footer {
+  opacity: 1;
+  font-size: 16px;
+  color: white;
+  position: relative;
+  text-align: center;
+  display: block;
+  margin-top: 60px;
+}
+
+.upcoming-ads-body a {
+  color: white;
+}
+
+.upcoming-ads-body footer small {
+  opacity: 1;
+  max-width: 60%;
+  margin: 0 auto;
+}
+
+.upcoming-ads-body footer .form-notice {
+  display: none;
+}
+
+.upcoming-ads-body strong {
+  font-weight: bold;
+}
+
+.upcoming-ads-body .hidden {
+  display: none;
+}

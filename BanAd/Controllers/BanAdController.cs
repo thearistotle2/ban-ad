@@ -47,17 +47,28 @@ public class BanAdController : Controller
 
     public IActionResult Upcoming(string id)
     {
-        throw new NotImplementedException();
+        if (!AdSlots.Value.Ads.ContainsKey(id))
+        {
+            return NotFound();
+        }
+
+        return View(new UpcomingViewModel
+        {
+            SiteId = Config.SiteId,
+            AdSlotId = id,
+            AdBaseUrl = $"{Config.SiteBaseUrl}/banad/ad/",
+            Upcoming = Files.QueuedAds(id)
+        });
     }
 
     #endregion
 
     #region " Ad Serving "
 
-    public IActionResult Ad(string id)
+    public IActionResult Ad(string id, [FromQuery] string? upcoming)
     {
-        var ad = AdBuilder.BuildAd(id);
-        return File(ad.Image(), ad.MimeType());
+        var ad = upcoming != null ? AdBuilder.BuildAd(id, upcoming) : AdBuilder.BuildAd(id);
+        return ad != null ? File(ad.Image(), ad.MimeType()) : NotFound();
     }
 
     public IActionResult Out(string id)

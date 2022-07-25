@@ -25,17 +25,28 @@ public class AdBuilder
         Config = config;
     }
 
-    public Ad BuildAd(string id)
+    public Ad BuildAd(string adSlotId)
     {
         // If we have an ad, serve it.
-        var (file, link) = Files.CurrentAd(id);
+        var (file, link) = Files.CurrentAd(adSlotId);
         if (file != null)
         {
             return BuildAdFromFile(file, link);
         }
         
         // Otherwise, serve a default ad.
-        return BuildDefault(id);
+        return BuildDefault(adSlotId);
+    }
+
+    public Ad? BuildAd(string adSlotId, string paidAdId)
+    {
+        var file = Files.PaidAd(adSlotId, paidAdId);
+        if (file != null)
+        {
+            return BuildAdFromFile(file, null);
+        }
+
+        return null;
     }
 
     private Ad BuildAdFromFile(string file, string link)
@@ -52,13 +63,13 @@ public class AdBuilder
         };
     }
 
-    private Ad BuildDefault(string id)
+    private Ad BuildDefault(string adSlotId)
     {
-        var advertise = $"{Config.SiteBaseUrl}/banad/advertise/{id}";
+        var advertise = $"{Config.SiteBaseUrl}/banad/advertise/{adSlotId}";
         
-        if (AdSlots.Value.Ads.ContainsKey(id))
+        if (AdSlots.Value.Ads.ContainsKey(adSlotId))
         {
-            var adSlot = AdSlots.Value.Ads[id];
+            var adSlot = AdSlots.Value.Ads[adSlotId];
             if (adSlot.DefaultImage != null)
             {
                 return BuildAdFromFile(adSlot.DefaultImage, adSlot.DefaultLink ?? advertise);

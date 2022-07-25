@@ -1,6 +1,7 @@
 using System.Globalization;
 using BanAd.Config;
 using BanAd.Processing.Entities;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using File = SLSAK.Docker.IO.File;
 
 namespace BanAd.Processing.Connectors;
@@ -52,6 +53,26 @@ public class FileConnector
 
     #endregion
     
+    #region " PaidAd "
+
+    public string? PaidAd(string adSlotId, string adId)
+    {
+        var directory =
+            Directory
+            .GetDirectories(PaidDirectory(adSlotId), $"{adId}*")
+            .SingleOrDefault();
+        if (directory != null)
+        {
+            return Directory
+                .GetFiles(directory) // *.* will match extensionless files as well, so just skip it and do the below.
+                .FirstOrDefault(filename => filename[1..].Contains("."));
+        }
+
+        return null;
+    }
+    
+    #endregion
+    
     #region " FutureHours "
 
     public FutureHours FutureHours(string adSlotId)
@@ -86,9 +107,39 @@ public class FileConnector
     
     #region " QueuedAds "
 
-    public void QueuedAds(string adSlotId)
+    public QueuedAds QueuedAds(string adSlotId)
     {
-        var paid = Directory.GetDirectories(PaidDirectory(adSlotId));
+        var ads = new QueuedAds();
+
+        var current = CurrentAd(adSlotId);
+        if (current.Filename != null)
+        {
+            var expires = DateTime.Parse(
+                Path.GetFileNameWithoutExtension(current.Filename),
+                null,
+                // Respect the Z, because the calculation below doesn't work Local to UTC.
+                DateTimeStyles.RoundtripKind);
+            ads.Current = (current.Link, expires);
+        }
+
+        var paid =
+            Directory
+                .GetDirectories(PaidDirectory(adSlotId))
+                .OrderBy(dir => dir);
+        if (paid.Any())
+        {
+            var list = new List<(string Id, string Link, int Hours)>();
+            foreach (var directory in paid)
+            {
+                var parts = Path.GetFileName(directory).Split('_');
+                var link = File.ReadAllText(Path.Combine(directory, "link"));
+                list.Add((parts.First(), link, int.Parse(parts.Last())));
+            }
+
+            ads.Upcoming = list;
+        }
+
+        return ads;
     }
     
     #endregion
