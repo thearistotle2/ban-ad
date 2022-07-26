@@ -122,7 +122,7 @@ The example above is the minimum required to set up an ad slot, but the full lis
 - `defaultLink` is only used `defaultImage` is also provided.
 - `banAddress` can be used to keep ad payments separate for each ad slot.
 
-Ad slot ids can be generated for you by the app at `/banad/newid`.
+**Ad slot ids can be generated for you by the app at `/banad/newid`.**
 
 ## Gmail Setup Instructions
 
