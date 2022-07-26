@@ -102,8 +102,7 @@ In the `ad-slots` directory, create a file for each ad slot. Each file should be
 filename:
 629B5C2E
 
-contents: {"banPerHour": 0, "width": 300, "height": 180
-}
+contents: {"banPerHour": 0, "width": 300, "height": 180 }
 ```
 
 The example above is the minimum required to set up an ad slot, but the full list of settings is below:
