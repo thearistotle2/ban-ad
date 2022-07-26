@@ -122,6 +122,8 @@ The example above is the minimum required to set up an ad slot, but the full lis
 - `defaultLink` is only used `defaultImage` is also provided.
 - `banAddress` can be used to keep ad payments separate for each ad slot.
 
+Ad slot ids can be generated for you by the app at `/banad/newid`.
+
 ## Gmail Setup Instructions
 
 You can use any SMTP with TLS and IMAP with SSL, but the defaults are set up for Gmail. In order to set up a new account
