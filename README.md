@@ -141,12 +141,10 @@ to support BanAd, you can follow these steps:
 Add the base path for the BanAd container as `data-banad-url` to your `body` tag:
 
 ```html
-
 <body data-banad-url="/ads">
 ```
 
 ```html
-
 <body data-banad-url="https://ads.your-site.com">
 ```
 
@@ -155,12 +153,10 @@ Add the base path for the BanAd container as `data-banad-url` to your `body` tag
 Add the script as served up by the ad system to your pages:
 
 ```html
-
 <script src="/ads/js/banad.js"></script>
 ```
 
 ```html
-
 <script src="https://ads.your-site.com/js/banad.js"></script>
 ```
 
@@ -169,8 +165,16 @@ Add the script as served up by the ad system to your pages:
 Add the `data-banad-id` attribute to each of your ad slots:
 
 ```html
-
 <div data-banad-id="your-id"></div>
+```
+
+### Favicon
+
+If you host the ad system at a path under your site, browsers should use the favicon at the base of your site automatically.  If you're running it under its own domain or subdomain, you can mount a favicon like so:
+
+```yaml
+    volumes:
+      - '/path/to/favicon.ico:/app/wwwroot/favicon.ico'
 ```
 
 ### That's it!
