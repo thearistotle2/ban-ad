@@ -98,7 +98,7 @@ The container can be configured using the following environment variables:
 
 In the `ad-slots` directory, create a file for each ad slot. Each file should be named as the ad slot id:
 
-```json
+```
 filename:
 629B5C2E
 
@@ -108,14 +108,14 @@ contents: {"banPerHour": 0, "width": 300, "height": 180
 
 The example above is the minimum required to set up an ad slot, but the full list of settings is below:
 
-```json
+```
 {
-  "banPerHour": int,
-  "width": int,
-  "height": int,
+  "banPerHour"  : int,
+  "width"       : int,
+  "height"      : int,
   "defaultImage": "string",
-  "defaultLink": "string",
-  "banAddress": "string"
+  "defaultLink" : "string",
+  "banAddress"  : "string"
 }
 ```
 
