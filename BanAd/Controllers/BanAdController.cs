@@ -6,6 +6,7 @@ using BanAd.Processing.Connectors;
 using BanAd.Processing.Entities;
 using BanAd.Processing.Workflow;
 using BanAd.ViewModels;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
@@ -21,6 +22,7 @@ public class BanAdController : Controller
     private AdSlotsMonitor AdSlots { get; }
     private FileConnector Files { get; }
     private RunOptions Config { get; }
+    private IAntiforgery Antiforgery { get; }
     private static ConcurrentDictionary<string, DateTime> TimeTracker { get; } = new();
 
     public BanAdController(
@@ -28,13 +30,15 @@ public class BanAdController : Controller
         AdSubmissionProcessor processor,
         AdSlotsMonitor adSlots,
         FileConnector files,
-        RunOptions config)
+        RunOptions config,
+        IAntiforgery antiforgery)
     {
         AdBuilder = adBuilder;
         Processor = processor;
         AdSlots = adSlots;
         Files = files;
         Config = config;
+        Antiforgery = antiforgery;
     }
 
     #region " AdSlot Management "
@@ -88,7 +92,8 @@ public class BanAdController : Controller
             return NotFound();
         }
 
-        TimeTracker[Request.HttpContext.Connection.Id] = DateTime.UtcNow;
+        var token = Antiforgery.GetAndStoreTokens(Request.HttpContext).RequestToken;
+        TimeTracker[token] = DateTime.UtcNow;
 
         var mb = Math.DivRem(Config.MaxUploadSizeKiB, 1024);
         var adSlot = AdSlots.Value.Ads[id];
@@ -157,16 +162,18 @@ Honeypot field '{Config.BotHoneypotName}' submitted with value ('{honeypot}').")
             return true;
         }
 
+        var token = Request.Form["__RequestVerificationToken"].FirstOrDefault() ?? "";
+
         // Did not start on the page.
-        if (!TimeTracker.ContainsKey(Request.HttpContext.Connection.Id))
+        if (!TimeTracker.TryRemove(token, out DateTime loaded))
         {
             Console.WriteLine($@"Connection Id {Request.HttpContext.Connection.Id} determined to be a bot:
-Connection Id not in time tracker, so the request did not start on this page.");
+Antiforgery token not in time tracker, so the request did not start on this page.");
             return true;
         }
 
         // Submitted the page too quickly.
-        var timespan = DateTime.UtcNow - TimeTracker[Request.HttpContext.Connection.Id];
+        var timespan = DateTime.UtcNow - loaded;
         if (timespan < TimeSpan.FromSeconds(Config.BotMinSeconds))
         {
             Console.WriteLine($@"Connection Id {Request.HttpContext.Connection.Id} determined to be a bot:

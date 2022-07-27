@@ -1,5 +1,4 @@
 using BanAd.Config;
-using BanAd.Processing.Entities;
 
 namespace BanAd.ViewModels;
 
