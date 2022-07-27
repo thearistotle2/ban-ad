@@ -8,7 +8,7 @@ version: '3.8'
 services:
 
   banad:
-    image: 'thearistotle/ban-ad'
+    image: 'thearistotle/ban-ad:1.0.0'
     environment:
       - SITE_ID=My Cool Site
       - EMAIL_ADDRESS=my.cool.site@gmail.com
