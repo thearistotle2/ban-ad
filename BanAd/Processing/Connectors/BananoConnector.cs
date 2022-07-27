@@ -163,8 +163,12 @@ internal class BananoRpcConnector : BananoConnector
         };
         var response = await Client.PostAsJsonAsync(Config.BananoNode, request);
         response.EnsureSuccessStatusCode();
-        var payments = (await response.Content.ReadFromJsonAsync<HistoryPayments>())?.History;
-
+        var payments =
+            (await response.Content.ReadFromJsonAsync<HistoryPayments>())
+            ?.History
+            // We only care about receives.
+            ?.Where(payment => string.Equals(payment.Type, "receive", StringComparison.OrdinalIgnoreCase));
+        
         if (payments?.Any() == true)
         {
             return payments.ToDictionary(
@@ -189,6 +193,7 @@ internal class BananoRpcConnector : BananoConnector
 
         public class HistoryPayment
         {
+            public string Type { get; set; }
             public string? Amount { get; set; } // string? because some block types don't contain amount.
             public string Hash { get; set; }
         }
@@ -210,7 +215,7 @@ internal class BananoCreeperConnector : BananoConnector
             address,
             size = Config.BananoHistoryCount
         };
-        return await Process(Client.PostAsJsonAsync(Config.CreeperReceivableUrl, request));
+        return await Process(Client.PostAsJsonAsync(Config.CreeperReceivableUrl, request), false);
     }
 
     protected override async Task<Dictionary<string, decimal>> GetNewPaymentsHistory(string address)
@@ -220,14 +225,19 @@ internal class BananoCreeperConnector : BananoConnector
             address,
             size = Config.BananoHistoryCount
         };
-        return await Process( Client.PostAsJsonAsync(Config.CreeperHistoryUrl, request));
+        return await Process( Client.PostAsJsonAsync(Config.CreeperHistoryUrl, request), true);
     }
 
-    private async Task<Dictionary<string, decimal>> Process(Task<HttpResponseMessage> request)
+    private async Task<Dictionary<string, decimal>> Process(Task<HttpResponseMessage> request, bool filter)
     {
         var response = await request;
         response.EnsureSuccessStatusCode();
-        var payments = (await response.Content.ReadFromJsonAsync<Block[]>());
+        var payments = (await response.Content.ReadFromJsonAsync<IEnumerable<Block>>());
+        if (filter)
+        {
+            payments = payments?.Where(payment =>
+                string.Equals(payment.Type, "receive", StringComparison.OrdinalIgnoreCase));
+        }
 
         if (payments?.Any() == true)
         {
@@ -246,6 +256,7 @@ internal class BananoCreeperConnector : BananoConnector
     {
         public string Hash { get; set; }
         public decimal? Amount { get; set; }
+        public string? Type { get; set; } // receivable transactions won't have type.
     }
 
     #endregion

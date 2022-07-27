@@ -263,15 +263,18 @@ public class FileConnector
 
     private string NextAdId(string adSlotId, int hours, int banano)
     {
-        string? Max(string directory) =>
-            Directory.GetDirectories(directory)
+        int Max(string directory) =>
+            int.Parse(Directory.GetDirectories(directory)
                 .Select(Path.GetFileName)
                 .Select(dir => dir.Split('_').First())
-                .Max();
-
-        var id = int.Parse(
-            Max(PendingDirectory(adSlotId)) ?? Max(ApprovedDirectory(adSlotId)) ?? Max(PaidDirectory(adSlotId)) ?? "0000000"
-        ) + 1;
+                .Max() ?? "0000000");
+        
+        var id = new[]
+        {
+            Max(PendingDirectory(adSlotId)),
+            Max(ApprovedDirectory(adSlotId)),
+            Max(PaidDirectory(adSlotId))
+        }.Max() + 1;
 
         if (banano > 0)
         {
