@@ -11,7 +11,11 @@ jobs:
     steps:
       - name: Set output
         id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        run: |
+          version=${GITHUB_REF#refs/*/}
+          echo ::set-output name=major::${version%%.*}
+          echo ::set-output name=minor::${version%.*}
+          echo ::set-output name=patch::$version
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -31,7 +35,7 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: thearistotle/ban-ad:${{ steps.vars.outputs.tag }}
+          tags: thearistotle/ban-ad:${{ steps.vars.outputs.major }},thearistotle/ban-ad:${{ steps.vars.outputs.minor }},thearistotle/ban-ad:${{ steps.vars.outputs.patch }}
           
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
