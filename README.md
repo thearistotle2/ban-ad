@@ -155,11 +155,13 @@ Add the base path for the BanAd container as `data-banad-url` to your `body` tag
 Add the script as served up by the ad system to your pages:
 
 ```html
-<script src="/ads/js/banad.js"></script>
+  <script src="/ads/js/banad.js"></script>
+</body>
 ```
 
 ```html
-<script src="https://ads.your-site.com/js/banad.js"></script>
+  <script src="https://ads.your-site.com/js/banad.js"></script>
+</body>
 ```
 
 ### Ads
