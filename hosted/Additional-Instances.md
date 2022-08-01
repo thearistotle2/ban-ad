@@ -30,6 +30,12 @@ server {
 
 ## Docker Compose
 ### Ban-Ad Instance
+Run the following:
+
+```
+nano ~/banad/docker-compose.yaml
+```
+
 Add a service between the `banad` service and the `EXTERNAL DOCKER ITEMS`:
 
 ```
