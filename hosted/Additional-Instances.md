@@ -31,7 +31,6 @@ Add the following contents between the two sections following:
         rewrite /example(.*)$ $1 break;
         proxy_pass   http://example:2022/;
     }
-}
 ```
 
 *BETWEEN*
