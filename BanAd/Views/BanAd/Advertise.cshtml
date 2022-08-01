@@ -146,6 +146,11 @@ $('.form-notice-reveal').on('click', e => {
   $('.form-notice-reveal').hide();
 });
 
+$('#days').on('input', () => {
+  const days = $('#days')[0];
+  $('#hours').attr('required', !(days.value > 0));
+});
+
 $('#ad').on('input', () => {
     const input = $('#ad')[0];
     input.setCustomValidity(''); // Reset.

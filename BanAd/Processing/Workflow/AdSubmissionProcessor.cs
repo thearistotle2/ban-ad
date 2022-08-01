@@ -88,7 +88,7 @@ public class AdSubmissionProcessor
 
     private SubmittedAd Map(AdvertiseInputViewModel model)
     {
-        var hours = (model.Days ?? 0) * 24 + model.Hours;
+        var hours = model.Days.GetValueOrDefault() * 24 + model.Hours.GetValueOrDefault();
         return new SubmittedAd
         {
             AdSlotId = model.Id,

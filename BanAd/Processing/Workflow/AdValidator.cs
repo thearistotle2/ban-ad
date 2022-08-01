@@ -24,6 +24,11 @@ public class AdValidator
             return (false, "Unknown ad slot.");
         }
 
+        if (model.Days.GetValueOrDefault() + model.Hours.GetValueOrDefault() == 0)
+        {
+            return (false, "Ad must be submitted for at least 1 hour.");
+        }
+
         if (model.Ad == null)
         {
             return (false, "No ad provided.");

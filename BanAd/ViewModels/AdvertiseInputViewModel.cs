@@ -11,8 +11,8 @@ public class AdvertiseInputViewModel
     [Range(0, 9999)]
     public int? Days { get; set; }
     
-    [Required, Range(1, 9999)]
-    public int Hours { get; set; }
+    [Range(0, 9999)]
+    public int? Hours { get; set; }
     
     // Very simple: just make sure there is exactly one @ and it is surrounded by other characters.
     [Required, MinLength(3), RegularExpression(@"^[^@]+@[^@]+$")]
