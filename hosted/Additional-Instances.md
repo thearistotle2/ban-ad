@@ -77,3 +77,7 @@ Run the following:
 ```
 cd ~/banad && docker stack deploy -c docker-compose.yaml ${PWD##*/}
 ```
+
+### Test the new instance
+
+You should be able to go to http://banad.net/example/banad/newid and see a new ad slot id.
