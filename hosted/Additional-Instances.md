@@ -41,7 +41,6 @@ Add a service between the `banad` service and the `EXTERNAL DOCKER ITEMS`:
 ```
   example:
     image: 'thearistotle/ban-ad:1.0.1'
-    ports: ['2022:2022']
     secrets: [email.pwd]
     environment:
       - BANANO_WATCH_TYPE=Creeper
