@@ -24,7 +24,7 @@ nano ~/banad/nginx/default.conf
 
 Add the following contents between the two sections following:
 
-CONTENTS
+*ADD*
 ```
     # proxy /example/ to banad
     location ^~ /example/ {
@@ -34,7 +34,7 @@ CONTENTS
 }
 ```
 
-BETWEEN
+*BETWEEN*
 ```
     # proxy /ads/ to banad
     location ^~ /ads/ {
@@ -43,7 +43,7 @@ BETWEEN
     }
 ```
 
-AND
+*AND*
 ```
     location / {
         root   /usr/share/nginx/html;
