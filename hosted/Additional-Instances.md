@@ -16,16 +16,39 @@ mkdir ~/banad/hosted/example ~/banad/hosted/example/ad-slots ~/banad/hosted/exam
 ```
 
 ## NGINX Configuration
-Create a file at `~/banad/nginx/example.conf` with the following contents:
+Run the following:
 
 ```
-server {
+nano ~/banad/nginx/default.conf
+```
+
+Add the following contents between the two sections following:
+
+CONTENTS
+```
     # proxy /example/ to banad
     location ^~ /example/ {
         rewrite /example(.*)$ $1 break;
         proxy_pass   http://example:2022/;
     }
 }
+```
+
+BETWEEN
+```
+    # proxy /ads/ to banad
+    location ^~ /ads/ {
+        rewrite /ads(.*)$ $1 break;
+        proxy_pass   http://banad:2022/;
+    }
+```
+
+AND
+```
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
 ```
 
 ## Docker Compose
@@ -63,13 +86,6 @@ Add a service between the `banad` service and the `EXTERNAL DOCKER ITEMS`:
 ```
 
 You'll need to change the environment variables under the `CHANGE EVERYTHING BELOW HERE` comment to match the instance owner's information.
-
-### NGINX Instance
-Add the following line under `volumes`:
-
-```
-      - '/home/azureuser/banad/nginx/example.conf:/etc/nginx/conf.d/example.conf:ro'
-```
 
 ### Update the Docker stack
 Run the following:
