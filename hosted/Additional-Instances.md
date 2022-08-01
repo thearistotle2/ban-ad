@@ -12,7 +12,7 @@ mkdir ~/banad/hosted
 Run the following:
 
 ```
-mkdir ~/banad/hosted/example/ad-slots ~/banad/hosted/example/ads ~/banad/hosted/example/banano-tracking
+mkdir ~/banad/hosted/example ~/banad/hosted/example/ad-slots ~/banad/hosted/example/ads ~/banad/hosted/example/banano-tracking
 ```
 
 ## NGINX Configuration
