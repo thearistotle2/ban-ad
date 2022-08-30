@@ -71,6 +71,7 @@ Add a service between the `banad` service and the `EXTERNAL DOCKER ITEMS`:
       - EMAIL_DISPLAY_NAME=BananoAD
       ## CHANGE EVERYTHING BELOW HERE
       - SITE_ID=Example
+      - SITE_BASE_URL=/example
       - AD_APPROVER_EMAIL=approver@example.com
       - BANANO_PAYMENT_ADDRESS=ban_
       ## STOP
